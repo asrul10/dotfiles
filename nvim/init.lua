@@ -24,6 +24,7 @@ require('packer').startup(function(use)
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   }
   use { 'rafamadriz/friendly-snippets' }
+  use { 'windwp/nvim-autopairs' }
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
@@ -76,7 +77,7 @@ vim.o.smartcase = true
 vim.o.updatetime = 250
 vim.wo.signcolumn = 'yes'
 vim.o.background = 'dark'
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menu,menuone,noselect'
 vim.opt.colorcolumn = '100'
 vim.opt.tabstop = 4
 
@@ -464,6 +465,13 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+require('nvim-autopairs').setup {
+  disable_filetype = { 'TelescopePrompt', 'vim' },
+}
+
+local cmp_autopairs = require 'nvim-autopairs.completion.cmp'
+cmp.event:on('confirm_done', cmp_autopairs.on_confirm_done())
 
 vim.cmd [[colorscheme gruvbox]]
 -- The line beneath this is called `modeline`. See `:help modeline`
