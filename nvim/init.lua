@@ -23,6 +23,7 @@ require('packer').startup(function(use)
     'hrsh7th/nvim-cmp',
     requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   }
+  use { 'rafamadriz/friendly-snippets' }
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function()
@@ -77,6 +78,7 @@ vim.wo.signcolumn = 'yes'
 vim.o.background = 'dark'
 vim.o.completeopt = 'menuone,noselect'
 vim.opt.colorcolumn = '100'
+vim.opt.tabstop = 4
 
 -- [[ Basic Keymaps ]]
 -- Set <space> as the leader key
@@ -421,6 +423,8 @@ require('lspconfig').sumneko_lua.setup {
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local luasnip = require 'luasnip'
+
+require('luasnip.loaders.from_vscode').lazy_load()
 
 cmp.setup {
   snippet = {
