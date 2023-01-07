@@ -26,9 +26,9 @@ function gitconf {
 }
 
 function alacritty {
-  alacritty_path="${HOME}/.config/alacritty.yml"
+  alacritty_path="${HOME}/.config/alacritty"
   echo "Setting up alacritty..."
-  rm_if_exists "${alacritty_path}"
+  rm_if_exists "${alacritty_path}/alacritty.yml"
   symlink "alacritty/alacritty.yml" "${alacritty_path}"
 }
 
