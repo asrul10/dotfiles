@@ -56,19 +56,19 @@ function zsh {
 
 function zsh_vi_mode {
   echo "Setting up zsh-vi-mode..."
-  #custom_zsh=${HOME}/.dotfiles/zsh
-  rm_if_exists "${ZSH_CUSTOM}/plugins/zsh-vi-mode"
+  custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
+  rm_if_exists "${custom_zsh}/plugins/zsh-vi-mode"
   git clone https://github.com/jeffreytse/zsh-vi-mode.git \
-    "${ZSH_CUSTOM}/plugins/zsh-vi-mode"
+    "${custom_zsh}/plugins/zsh-vi-mode"
 }
 
 function powerlevel10k {
   echo "Setting up powerlevel10k..."
-  # custom_zsh=${HOME}/.dotfiles/zsh/custom
-  rm_if_exists "${ZSH_CUSTOM}/themes/powerlevel10k"
+  custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
+  rm_if_exists "${custom_zsh}/themes/powerlevel10k"
   rm_if_exists "${HOME}/.p10k.zsh"
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
-    "${ZSH_CUSTOM}/themes/powerlevel10k"
+    "${custom_zsh}/themes/powerlevel10k"
   symlink "/zsh/p10k.zsh" "${HOME}/.p10k.zsh"
 }
 
