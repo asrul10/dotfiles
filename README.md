@@ -1,15 +1,17 @@
-# ViviTerm
-All-in-one Linux terminal configuration for software development.
+# Asrul's Dotfiles
+All-in-one Unix/Linux terminal configuration for software development.
 
-![vivi victory](vivi_victory.webp)
-
-## Requirements
+## Package requirements
 - [alacritty](https://github.com/alacritty/alacritty)
-- [zsh](https://github.com/ohmyzsh/ohmyzsh)
 - [tmux](https://github.com/tmux/tmux)
 - [neovim](https://github.com/neovim/neovim)
+- [zsh](https://github.com/ohmyzsh/ohmyzsh)
+- [fd](https://github.com/sharkdp/fd)
+- [ripgrep](https://github.com/burntsushi/ripgrep)
 
-## Install
+## Usage
 ```bash
-./install.sh
+git clone https://github.com/asrul10/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+./install
 ```

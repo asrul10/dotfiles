@@ -1,0 +1,11 @@
+[core]
+  autocrlf = input
+  editor = nvim
+  filemode = false
+  trustctime = false
+  whitespace = fix
+  excludesFile = '~/.gitignore'
+
+[user]
+  email = asrul@kotaxdev.com
+  name = asrul10
