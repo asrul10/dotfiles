@@ -8,6 +8,7 @@ All-in-one Unix/Linux terminal configuration for software development.
 - [zsh](https://github.com/ohmyzsh/ohmyzsh)
 - [fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/burntsushi/ripgrep)
+- [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
 
 ## Usage
 ```bash

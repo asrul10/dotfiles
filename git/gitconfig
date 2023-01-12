@@ -5,7 +5,17 @@
   trustctime = false
   whitespace = fix
   excludesFile = '~/.gitignore'
+  pager = diff-so-fancy | less --tabs=4 -RFX
+
+[apply]
+  whitespace = fix
+
+[branch]
+  sort = -committerdate
 
 [user]
   email = asrul@kotaxdev.com
   name = asrul10
+
+[interactive]
+  diffFilter = diff-so-fancy --patch
