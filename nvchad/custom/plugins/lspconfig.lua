@@ -1,11 +1,11 @@
 local on_attach = require("plugins.configs.lspconfig").on_attach
 local capabilities = require("plugins.configs.lspconfig").capabilities
 
-local lspconfig = require "lspconfig"
+local lspconfig = require("lspconfig")
 
 local function lspSymbol(name, icon)
-  local hl = "DiagnosticSign" .. name
-  vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
+	local hl = "DiagnosticSign" .. name
+	vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
 end
 
 lspSymbol("Error", "E")
@@ -14,43 +14,43 @@ lspSymbol("Hint", "H")
 lspSymbol("Warn", "W")
 
 local servers = {
-  -- HTML
-  "html",
+	-- HTML
+	"html",
 
-  -- CSS
-  "cssls",
+	-- CSS
+	"cssls",
 
-  -- TypeScript, JavaScript
-  "tsserver",
-  -- "tailwindcss", -- commented because it is slow
+	-- TypeScript, JavaScript
+	"tsserver",
+	-- "tailwindcss", -- commented because it is slow
 
-  -- Rust
-  "rust_analyzer",
+	-- Rust
+	"rust_analyzer",
 
-  -- Go
-  "gopls",
+	-- Go
+	"gopls",
 
-  -- Yaml
-  "yamlls",
+	-- Yaml
+	"yamlls",
 
-  -- PHP
-  "intelephense",
+	-- PHP
+	"intelephense",
 
-  -- JSON
-  "jsonls",
+	-- JSON
+	"jsonls",
 
-  -- Docker
-  "dockerls",
+	-- Docker
+	"dockerls",
 
-  -- Bash
-  "bashls",
+	-- Bash
+	"bashls",
 }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+	lspconfig[lsp].setup({
+		on_attach = on_attach,
+		capabilities = capabilities,
+	})
 end
 
 -- lspconfig["tailwindcss"].setup {
