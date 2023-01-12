@@ -51,7 +51,7 @@ function neovim {
 function zsh {
   echo "Setting up oh-my-zsh..."
   rm_if_exists "${HOME}/.zshrc"
-  symlink "/zsh/zshrc" "${HOME}/.zshrc"
+  symlink "zsh/zshrc" "${HOME}/.zshrc"
 }
 
 function zsh_vi_mode {
@@ -69,7 +69,7 @@ function powerlevel10k {
   rm_if_exists "${HOME}/.p10k.zsh"
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
     "${custom_zsh}/themes/powerlevel10k"
-  symlink "/zsh/p10k.zsh" "${HOME}/.p10k.zsh"
+  symlink "zsh/p10k.zsh" "${HOME}/.p10k.zsh"
 }
 
 function fzf {
