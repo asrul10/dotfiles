@@ -52,8 +52,8 @@ return {
 		requires = "nvim-lua/plenary.nvim",
 		config = function()
 			require("todo-comments").setup({
-        signs = false
-      })
+				signs = false,
+			})
 		end,
 	},
 }
