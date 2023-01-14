@@ -24,7 +24,7 @@ M.treesitter = {
 		"javascript",
 		"typescript",
 		"tsx",
-		-- "tailwindcss-language-server",
+		"tailwindcss-language-server",
 
 		-- Rust
 		"rust",

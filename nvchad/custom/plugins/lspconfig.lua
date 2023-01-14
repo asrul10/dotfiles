@@ -22,7 +22,6 @@ local servers = {
 
 	-- TypeScript, JavaScript
 	"tsserver",
-	-- "tailwindcss", -- commented because it is slow
 
 	-- Rust
 	"rust_analyzer",
@@ -53,8 +52,8 @@ for _, lsp in ipairs(servers) do
 	})
 end
 
--- lspconfig["tailwindcss"].setup {
---   on_attach = on_attach,
---   capabilities = capabilities,
---   filetypes = { "typescriptreact" },
--- }
+lspconfig["tailwindcss"].setup {
+  on_attach = on_attach,
+  capabilities = capabilities,
+  filetypes = { "typescriptreact" },
+}
