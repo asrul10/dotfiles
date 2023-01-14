@@ -13,7 +13,9 @@ M.ui = {
 				grey_fg2 = "#7c6f64",
 			},
 			-- styling https://github.com/chriskempson/base16/blob/main/styling.md
-			base_16 = {},
+			base_16 = {
+				base08 = "#fe8019",
+			},
 		},
 	},
 }
