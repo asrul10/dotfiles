@@ -24,7 +24,6 @@ M.treesitter = {
 		"javascript",
 		"typescript",
 		"tsx",
-		"tailwindcss-language-server",
 
 		-- Rust
 		"rust",
@@ -77,6 +76,7 @@ M.mason = {
 		-- HTML CSS
 		"css-lsp",
 		"html-lsp",
+		"tailwindcss-language-server",
 
 		-- TypeScript, JavaScript
 		"deno",
