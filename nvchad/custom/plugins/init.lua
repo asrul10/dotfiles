@@ -63,4 +63,6 @@ return {
 			require("treesj").setup()
 		end,
 	},
+
+	["asrul10/readable-number.nvim"] = {},
 }
