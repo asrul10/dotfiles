@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# Update zsh-vi-mode
+cd "$HOME/.dotfiles/zsh/plugins/zsh-vi-mode" || exit
+git pull origin master 
+
+# Update powerlevel10k
+cd "$HOME/.dotfiles/zsh/themes/powerlevel10k" || exit
+git pull origin master
+
+# Update fzf
+cd "$HOME/.fzf" || exit
+git pull origin master
+"${HOME}/.fzf/install"

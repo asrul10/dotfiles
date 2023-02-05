@@ -21,4 +21,4 @@ cd ~/.dotfiles
 - [ ] Auto install neovim
 - [ ] Auto install fd
 - [ ] Auto install ripgrep
-- [ ] Auto update and build the repositories
+- [x] Auto update and build the repositories
