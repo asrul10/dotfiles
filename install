@@ -25,6 +25,12 @@ function gitconf {
   symlink "git/gitconfig" "${HOME}/.gitconfig"
 }
 
+function download_latest_release {
+  release_info=$(curl --silent "https://api.github.com/repos/${1}/releases/latest")
+  download_url=$(echo "$release_info" | grep '"browser_download_url":' | grep -Eo "${2}")
+  wget "$download_url" -O "${HOME}/$(basename "$download_url")"
+}
+
 function alacritty {
   alacritty_path="${HOME}/.config/alacritty"
   echo "Setting up alacritty..."
@@ -33,6 +39,14 @@ function alacritty {
 }
 
 function tmux {
+  echo "Installing tmux..."
+  rm_if_exists "${HOME}/.tmux"
+  download_latest_release "tmux/tmux" "https://.*tmux.*.tar.gz"
+  tar -xzf "$HOME/$(basename "$download_url")" -C "${HOME}"
+  mv "${HOME}"/tmux-*/ "${HOME}/.tmux"
+  cd "${HOME}/.tmux"
+  ./configure
+  make && sudo make install
   echo "Setting up tmux..."
   rm_if_exists "${HOME}/.tmux.conf"
   symlink "tmux/tmux.conf" "${HOME}/.tmux.conf"
