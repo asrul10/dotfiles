@@ -158,9 +158,6 @@ M.telescope = {
 		find_files = {
 			previewer = false,
 		},
-		live_grep = {
-			previewer = false,
-		},
 		buffers = {
 			previewer = false,
 		},

@@ -4,6 +4,7 @@ M.general = {
 	n = {
 		["<leader>sa"] = { ":%s/", "Find and replace all" },
 		["<leader>ft"] = { ":TodoTelescope previewer=false<CR>", "Find TODO" },
+		["<leader>fs"] = { ":Telescope lsp_document_symbols<CR>", "Find symbols" },
 		["<leader>ww"] = { ":lua require('readable-number').readable_number()<CR>", "Convert number to readable" },
 	},
 	v = {
