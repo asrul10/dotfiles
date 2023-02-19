@@ -26,7 +26,7 @@ vim.g.copilot_no_tab_map = true
 vim.cmd([[autocmd FileType php setlocal shiftwidth=4]])
 
 -- Auto resize panes when resizing nvim window
--- autocmd("VimResized", {
---   pattern = "*",
---   command = "tabdo wincmd =",
--- })
+autocmd("VimResized", {
+  pattern = "*",
+  command = "tabdo wincmd =",
+})
