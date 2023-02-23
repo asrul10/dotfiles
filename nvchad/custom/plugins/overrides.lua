@@ -56,6 +56,9 @@ M.treesitter = {
 
 		-- Bash
 		"bash",
+
+		-- Graphql
+		"graphql",
 	},
 }
 
