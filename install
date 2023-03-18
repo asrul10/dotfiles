@@ -39,14 +39,6 @@ function alacritty {
 }
 
 function tmux {
-  echo "Installing tmux..."
-  rm_if_exists "${HOME}/.tmux"
-  download_latest_release "tmux/tmux" "https://.*tmux.*.tar.gz"
-  tar -xzf "$HOME/$(basename "$download_url")" -C "${HOME}"
-  mv "${HOME}"/tmux-*/ "${HOME}/.tmux"
-  cd "${HOME}/.tmux"
-  ./configure
-  make && sudo make install
   echo "Setting up tmux..."
   rm_if_exists "${HOME}/.tmux.conf"
   symlink "tmux/tmux.conf" "${HOME}/.tmux.conf"
