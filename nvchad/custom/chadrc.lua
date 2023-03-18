@@ -1,8 +1,9 @@
+---@type ChadrcConfig
 local M = {}
 
 M.ui = {
-	theme_toggle = { "onedark", "one_light" },
 	theme = "gruvbox",
+	theme_toggle = { "gruvbox", "one_light" },
 	transparency = true,
 	changed_themes = {
 		gruvbox = {
@@ -18,9 +19,24 @@ M.ui = {
 			},
 		},
 	},
+	statusline = {
+		separator_style = "block",
+		overriden_modules = function()
+			return require("custom.configs.statusline")
+		end,
+	},
+	tabufline = {
+		overriden_modules = function()
+			return {
+				buttons = function()
+					return ""
+				end,
+			}
+		end,
+	},
 }
 
-M.plugins = require("custom.plugins")
+M.plugins = "custom.plugins"
 
 -- check core.mappings for table structure
 M.mappings = require("custom.mappings")

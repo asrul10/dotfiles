@@ -60,17 +60,15 @@ M.treesitter = {
 		-- Graphql
 		"graphql",
 	},
+	indent = {
+		enable = true,
+		disable = {
+			"python",
+		},
+	},
 }
 
 M.mason = {
-	ui = {
-		icons = {
-			package_pending = " ",
-			package_installed = " ",
-			package_uninstalled = " ",
-		},
-	},
-
 	ensure_installed = {
 		-- Lua
 		"lua-language-server",
@@ -103,18 +101,21 @@ M.mason = {
 		"php-cs-fixer",
 		"phpcs",
 
-		-- Yaml
-		"yaml-language-server",
-
 		-- Json
 		"json-lsp",
 
 		-- Docker
 		"dockerfile-language-server",
 	},
+	ui = {
+		icons = {
+			package_pending = " ",
+			package_installed = " ",
+			package_uninstalled = " ",
+		},
+	},
 }
 
--- git support in nvimtree
 M.nvimtree = {
 	git = {
 		enable = true,
@@ -130,22 +131,6 @@ M.nvimtree = {
 	},
 }
 
--- ui config
-M.ui = {
-	statusline = {
-		separator_style = "block",
-		overriden_modules = function()
-			return require("custom.plugins.statusline")
-		end,
-	},
-	tabufline = {
-		overriden_modules = function()
-			return require("custom.plugins.tabufline")
-		end,
-	},
-}
-
--- telescope
 M.telescope = {
 	defaults = {
 		prompt_prefix = "  ",
@@ -167,7 +152,6 @@ M.telescope = {
 	},
 }
 
--- gitsigns
 M.gitsigns = {
 	signs = {
 		add = { hl = "DiffAdd", text = "+", numhl = "GitSignsAddNr" },
@@ -177,7 +161,6 @@ M.gitsigns = {
 	},
 }
 
--- cmp
 M.cmp = {
 	window = {
 		completion = {

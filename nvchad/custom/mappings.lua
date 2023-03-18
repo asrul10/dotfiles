@@ -1,3 +1,4 @@
+---@type MappingsTable
 local M = {}
 
 M.general = {
@@ -11,7 +12,13 @@ M.general = {
 		["J"] = { ":m '>+1<CR>gv=gv", "move line down" },
 		["K"] = { ":m '<-2<CR>gv=gv", "move line up" },
 		["<leader>ss"] = { ":s/", "Find and replace selected lines" },
+		["gcc"] = {
+			"<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
+			"toggle comment",
+		},
 	},
 }
+
+-- more keybinds!
 
 return M
