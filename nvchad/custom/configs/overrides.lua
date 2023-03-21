@@ -80,7 +80,7 @@ M.mason = {
 		"tailwindcss-language-server",
 
 		-- TypeScript, JavaScript
-		"deno",
+		-- "deno",
 		"typescript-language-server",
 		"eslint_d",
 
