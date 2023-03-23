@@ -11,10 +11,10 @@ local sources = {
 	b.formatting.stylua,
 
 	-- TypeScript, JavaScript
-	b.diagnostics.eslint_d,
-	b.code_actions.eslint_d,
-	b.formatting.eslint_d,
-	-- b.formatting.deno_fmt,
+	-- b.diagnostics.eslint_d,
+	-- b.code_actions.eslint_d,
+	-- b.formatting.eslint_d,
+	b.formatting.deno_fmt, -- choosed deno over eslint_d because it's not runnin in the background
 
 	-- Rust
 	b.formatting.rustfmt,
