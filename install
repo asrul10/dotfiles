@@ -68,6 +68,14 @@ function zsh_vi_mode {
     "${custom_zsh}/plugins/zsh-vi-mode"
 }
 
+function zsh_autosuggestions {
+  echo "Setting up zsh-autosuggestions..."
+  custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
+  rm_if_exists "${custom_zsh}/plugins/zsh-autosuggestions"
+  git clone https://github.com/zsh-users/zsh-autosuggestions.git \
+    "${custom_zsh}/plugins/zsh-autosuggestions"
+}
+
 function powerlevel10k {
   echo "Setting up powerlevel10k..."
   custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
@@ -106,6 +114,7 @@ function main {
   neovim
   zsh
   zsh_vi_mode
+  zsh_autosuggestions
   powerlevel10k
   fzf
 }

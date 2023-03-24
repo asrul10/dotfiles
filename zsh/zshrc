@@ -13,6 +13,7 @@ plugins=(
   fzf
   colored-man-pages
   fd
+  zsh-autosuggestions
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -35,3 +36,5 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
+
+bindkey '^A' autosuggest-accept
