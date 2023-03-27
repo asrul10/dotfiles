@@ -106,6 +106,9 @@ M.mason = {
 
 		-- Docker
 		"dockerfile-language-server",
+
+    -- Bash
+    "bash-language-server"
 	},
 	ui = {
 		icons = {
