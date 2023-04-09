@@ -10,8 +10,8 @@ M.general = {
 		["gcc"] = { "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", "toggle comment" },
 	},
 	v = {
-		["J"] = { "<ESC><cmd>m '>+1<CR>gv=gv", "move line down" },
-		["K"] = { "<ESC><cmd>m '<-2<CR>gv=gv", "move line up" },
+		["J"] = { ":m '>+1<CR>gv=gv", "move line down" },
+		["K"] = { ":m '<-2<CR>gv=gv", "move line up" },
 		["<leader>ss"] = { ":s/", "Find and replace selected lines" },
 		["gcc"] = {
 			"<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
