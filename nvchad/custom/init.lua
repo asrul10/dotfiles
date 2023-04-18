@@ -25,6 +25,13 @@ vim.g.copilot_no_tab_map = true
 -- Set shiftwidth 4 based on PHP file type
 vim.cmd([[autocmd FileType php setlocal shiftwidth=4]])
 
+-- Set shiftwidth 4 based on project name
+local project_name = "???"
+autocmd("BufEnter", {
+  pattern = "*",
+  command = "if expand('%:p') =~# '" .. project_name .. "' | setlocal shiftwidth=4 | endif",
+})
+
 -- Auto resize panes when resizing nvim window
 autocmd("VimResized", {
 	pattern = "*",
