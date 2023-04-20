@@ -22,9 +22,6 @@ local servers = {
 	-- CSS
 	"cssls",
 
-	-- TypeScript, JavaScript
-	"tsserver",
-
 	-- Rust
 	"rust_analyzer",
 
@@ -51,14 +48,24 @@ for _, lsp in ipairs(servers) do
 	})
 end
 
+-- Tailwind
 lspconfig.tailwindcss.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	filetypes = { "typescriptreact" },
+	root_dir = util.root_pattern(".tailwindcss"),
 })
 
+-- TypeScript, JavaScript
 lspconfig.tsserver.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
-	root_dir = util.root_pattern(".git"),
+	root_dir = util.root_pattern(".tsserver"),
+	single_file_support = false,
+})
+
+-- Deno
+lspconfig.denols.setup({
+	on_attach = on_attach,
+	root_dir = util.root_pattern(".denols"),
 })
