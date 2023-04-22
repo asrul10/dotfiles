@@ -60,6 +60,18 @@ function zsh {
   symlink "zsh/zshrc" "${HOME}/.zshrc"
 }
 
+function mycli {
+  echo "Setting up mycli..."
+  rm_if_exists "${HOME}/.myclirc"
+  symlink "mycli/myclirc" "${HOME}/.myclirc"
+}
+
+function pgcli {
+  echo "Setting up pgcli..."
+  rm_if_exists "${HOME}/.config/pgcli/config"
+  symlink "pgcli/config" "${HOME}/.config/pgcli/config"
+}
+
 function zsh_vi_mode {
   echo "Setting up zsh-vi-mode..."
   custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
@@ -113,6 +125,8 @@ function main {
   tmux
   neovim
   zsh
+  mycli
+  pgcli
   zsh_vi_mode
   zsh_autosuggestions
   powerlevel10k

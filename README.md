@@ -10,6 +10,8 @@ All-in-one Unix/Linux terminal configuration for software development.
 - [fd](https://github.com/sharkdp/fd)
 - [ripgrep](https://github.com/burntsushi/ripgrep)
 - [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
+- [mycli](https://github.com/dbcli/mycli)
+- [pgcli](https://github.com/dbcli/pgcli)
 
 ## Usage
 ```bash
