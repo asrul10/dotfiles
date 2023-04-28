@@ -38,3 +38,11 @@ _fzf_compgen_dir() {
 }
 
 bindkey '^A' autosuggest-accept
+
+# Custom key bindings for keychron k6
+# if [ -f $HOME/.Xmodmap ]; then
+#     xmodmap $HOME/.Xmodmap
+# fi
+
+# git checkout fzf
+alias gch='git checkout $(git branch | fzf)'
