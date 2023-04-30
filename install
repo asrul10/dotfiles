@@ -72,12 +72,6 @@ function pgcli {
   symlink "pgcli/config" "${HOME}/.config/pgcli/config"
 }
 
-function keymap {
-  echo "Setting up xmodmap..."
-  rm_if_exists "${HOME}/.Xmodmap"
-  symlink "xmodmap/Xmodmap" "${HOME}/.Xmodmap"
-}
-
 function zsh_vi_mode {
   echo "Setting up zsh-vi-mode..."
   custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
@@ -133,7 +127,6 @@ function main {
   zsh
   mycli
   pgcli
-  keymap
   zsh_vi_mode
   zsh_autosuggestions
   powerlevel10k
