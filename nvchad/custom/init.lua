@@ -11,11 +11,11 @@ opt.scrolloff = 8
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-	group = highlight_group,
-	pattern = "*",
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = "*",
 })
 
 -- Copilot config
@@ -34,6 +34,6 @@ autocmd("BufEnter", {
 
 -- Auto resize panes when resizing nvim window
 autocmd("VimResized", {
-	pattern = "*",
-	command = "tabdo wincmd =",
+  pattern = "*",
+  command = "tabdo wincmd =",
 })
