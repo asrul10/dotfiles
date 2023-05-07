@@ -8,6 +8,7 @@ M.general = {
 		["<leader>fs"] = { "<cmd>Telescope lsp_document_symbols<CR>", "Find symbols" },
 		["<leader>ww"] = { "<cmd>lua require('readable-number').readable_number()<CR>", "Convert number to readable" },
 		["gcc"] = { "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", "toggle comment" },
+		["<leader>kk"] = { "<cmd>Telescope keymaps<CR>", "Find keymaps" },
 	},
 	v = {
 		["J"] = { ":m '>+1<CR>gv=gv", "move line down" },
