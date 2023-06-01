@@ -45,4 +45,4 @@ alias home='cd ~'
 # git checkout fzf
 alias gch='git checkout $(git branch | fzf)'
 
-export EDITOR='nvim'
+export EDITOR='vi'
