@@ -21,6 +21,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- Copilot config
 vim.cmd([[imap <silent><script><expr> <C-a> copilot#Accept("\<CR>")]])
 vim.g.copilot_no_tab_map = true
+vim.g.copilot_filetypes = { markdown = true }
 
 -- Set shiftwidth 4 based on PHP file type
 vim.cmd([[autocmd FileType php setlocal shiftwidth=4]])
