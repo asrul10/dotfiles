@@ -27,7 +27,7 @@ vim.g.copilot_filetypes = { markdown = true }
 vim.cmd([[autocmd FileType php setlocal shiftwidth=4]])
 
 -- Set shiftwidth 4 based on project name
-local project_name = "broom-core\\|scraper"
+local project_name = ""
 autocmd("BufEnter", {
   pattern = "*",
   command = "if expand('%:p') =~# '" .. project_name .. "' | setlocal shiftwidth=4 | endif",
