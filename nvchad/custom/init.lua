@@ -38,3 +38,7 @@ autocmd("VimResized", {
   pattern = "*",
   command = "tabdo wincmd =",
 })
+autocmd("FileType", {
+  pattern = "ejs",
+  command = "setlocal filetype=html",
+})
