@@ -39,6 +39,9 @@ local servers = {
 
 	-- Bash
 	"bashls",
+
+  -- Markdown
+  "marksman",
 }
 
 for _, lsp in ipairs(servers) do

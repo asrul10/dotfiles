@@ -109,6 +109,9 @@ M.mason = {
 
 		-- Bash
 		"bash-language-server",
+
+    -- Markdown
+    "marksman",
 	},
 	ui = {
 		icons = {
