@@ -112,6 +112,9 @@ M.mason = {
 
     -- Markdown
     "marksman",
+
+    -- Yaml
+    "yaml-language-server",
 	},
 	ui = {
 		icons = {

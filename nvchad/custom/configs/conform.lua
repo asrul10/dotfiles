@@ -13,6 +13,7 @@ local options = {
 		scss = { "prettier" },
 		html = { "prettier" },
 		json = { "prettier" },
+		yaml = { "prettier" },
 	},
 }
 
