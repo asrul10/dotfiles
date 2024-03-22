@@ -70,7 +70,7 @@ local customStatusline = {
   end,
   git = function()
     if not vim.b[stbufnr()].gitsigns_head or vim.b[stbufnr()].gitsigns_git_status then
-      return ""
+      return "%#St_gitIcons#"
     end
 
     local git_status = vim.b[stbufnr()].gitsigns_status_dict
@@ -135,7 +135,7 @@ local customStatusline = {
   end,
   cwd = function()
     local name = vim.loop.cwd()
-    name = "%#St_InsertMode#" .. " " .. (name:match "([^/\\]+)[/\\]*$" or name) .. " "
+    name = "%#St_CommandMode#" .. " " .. (name:match "([^/\\]+)[/\\]*$" or name) .. " "
     return (vim.o.columns > 85 and name) or ""
   end,
   cursor = function()
