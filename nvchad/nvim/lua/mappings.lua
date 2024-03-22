@@ -29,3 +29,6 @@ map(
   "<ESC><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<CR>",
   { desc = "Toggle comment" }
 )
+
+map("n", "]c", "<cmd>Gitsigns next_hunk<CR>", { desc = "Next hunk" })
+map("n", "[c", "<cmd>Gitsigns prev_hunk<CR>", { desc = "Previous hunk" })
