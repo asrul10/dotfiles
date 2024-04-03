@@ -38,6 +38,15 @@ function alacritty {
   symlink "alacritty/alacritty.yml" "${alacritty_path}"
 }
 
+function kitty() {
+  kitty_path="${HOME}/.config/kitty"
+  echo "Setting up kitty..."
+  rm_if_exists "${kitty_path}/kitty.conf"
+  rm_if_exists "${kitty_path}/launch.conf"
+  symlink "kitty/kitty.conf" "${kitty_path}/kitty.conf"
+  symlink "kitty/launch.conf" "${kitty_path}/launch.conf"
+}
+
 function tmux {
   echo "Setting up tmux..."
   rm_if_exists "${HOME}/.tmux.conf"
@@ -119,7 +128,8 @@ exit
 function main {
   echo "Setting up dotfiles..."
   gitconf
-  alacritty
+  # alacritty
+  kitty
   tmux
   neovim
   zsh
