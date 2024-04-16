@@ -43,6 +43,7 @@ function kitty() {
   echo "Setting up kitty..."
   rm_if_exists "${kitty_path}/kitty.conf"
   rm_if_exists "${kitty_path}/launch.conf"
+  mkdir -p "${kitty_path}"
   symlink "kitty/kitty.conf" "${kitty_path}/kitty.conf"
   symlink "kitty/launch.conf" "${kitty_path}/launch.conf"
 }
