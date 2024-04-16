@@ -4,9 +4,6 @@ require "nvchad.mappings"
 
 local map = vim.keymap.set
 
-map("n", ";", ":", { desc = "CMD enter command mode" })
-map("i", "jk", "<ESC>")
-
 map("n", "<leader>sa", ":%s/", { desc = "Find and replace all" })
 map("n", "<leader>ft", "<cmd>TodoTelescope previewer=false<CR>", { desc = "Find TODO" })
 map("n", "<leader>fs", "<cmd>Telescope lsp_document_symbols<CR>", { desc = "Find symbols" })
