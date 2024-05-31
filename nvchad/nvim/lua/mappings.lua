@@ -16,6 +16,7 @@ map(
 map("n", "gcc", "<cmd>lua require('Comment.api').toggle.linewise.current()<CR>", { desc = "toggle comment" })
 map("n", "<leader>kk", "<cmd>Telescope keymaps<CR>", { desc = "Find keymaps" })
 map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Open line diagnostics" })
+map("n", "<leader>fp", "<cmd>Copilot panel<CR>", { desc = "Show copilot panel" })
 
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
 map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })

@@ -15,31 +15,35 @@ opt.scrolloff = 8
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
-	callback = function()
-		vim.highlight.on_yank()
-	end,
-	group = highlight_group,
-	pattern = "*",
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = "*",
 })
 
 -- Set up diagnostics
-vim.diagnostic.config({
-	virtual_text = false,
-	signs = true,
-	float = { border = "single" },
-})
+vim.diagnostic.config {
+  virtual_text = false,
+  signs = true,
+  float = { border = "single" },
+}
 
 -- Copilot config
-vim.cmd([[imap <silent><script><expr> <C-a> copilot#Accept("\<CR>")]])
+vim.keymap.set("i", "<C-a>", 'copilot#Accept("\\<CR>")', {
+  expr = true,
+  replace_keycodes = false,
+  silent = true,
+})
 vim.g.copilot_no_tab_map = true
 vim.g.copilot_filetypes = { markdown = true }
 
 -- Set shiftwidth 4 based on PHP file type
-vim.cmd([[autocmd FileType php setlocal shiftwidth=4]])
+vim.cmd [[autocmd FileType php setlocal shiftwidth=4]]
 
 -- Set shiftwidth 4 based on project name
 local project_name = "aa"
 autocmd("BufEnter", {
-	pattern = "*",
-	command = "if expand('%:p') =~# '" .. project_name .. "' | setlocal shiftwidth=4 | endif",
+  pattern = "*",
+  command = "if expand('%:p') =~# '" .. project_name .. "' | setlocal shiftwidth=4 | endif",
 })
