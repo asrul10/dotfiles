@@ -12,7 +12,6 @@ plugins=(
   zsh-vi-mode
   fzf
   colored-man-pages
-  fd
   zsh-autosuggestions
 )
 
