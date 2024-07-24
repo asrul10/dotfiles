@@ -49,8 +49,21 @@ return {
 
   -- Installed a plugins
   {
-    "github/copilot.vim",
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
     event = "InsertEnter",
+    config = function()
+      require("copilot").setup {
+        suggestion = {
+          keymap = {
+            accept = "<C-a>",
+          },
+        },
+        filetypes = {
+          markdown = true,
+        },
+      }
+    end,
   },
 
   {
