@@ -44,6 +44,7 @@ M.treesitter = {
 
     -- Markdown
     "markdown",
+    "markdown_inline",
 
     -- Yaml
     "yaml",
