@@ -50,7 +50,39 @@ return {
   -- Installed a plugins
   {
     "github/copilot.vim",
+    ft = { "markdown" },
     event = "InsertEnter",
+    config = function()
+      vim.g.copilot_no_tab_map = true
+      vim.api.nvim_set_keymap("i", "<C-a>", 'copilot#Accept("<CR>")', {
+        silent = true,
+        expr = true,
+        noremap = true,
+      })
+    end,
+  },
+
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false,
+    opts = {
+      provider = "copilot",
+      -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
+      mappings = {
+        submit = {
+          normal = "<CR>",
+          insert = "<C-a>",
+        },
+      },
+    },
+    build = "make",
+    dependencies = {
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+    },
   },
 
   {
