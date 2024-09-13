@@ -73,6 +73,7 @@ return {
       mappings = {
         submit = {
           normal = "<CR>",
+          insert = "<CR>",
         },
       },
     },
