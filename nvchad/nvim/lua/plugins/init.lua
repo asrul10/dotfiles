@@ -70,16 +70,10 @@ return {
     opts = {
       provider = "copilot",
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
-      mappings = {
-        submit = {
-          normal = "<CR>",
-          insert = "<C-a>",
-        },
-      },
     },
     build = "make",
     dependencies = {
-      "stevearc/dressing.nvim",
+      -- "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
     },
