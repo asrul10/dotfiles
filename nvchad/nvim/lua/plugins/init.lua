@@ -70,6 +70,11 @@ return {
     opts = {
       provider = "copilot",
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
+      mappings = {
+        submit = {
+          normal = "<CR>",
+        },
+      },
     },
     build = "make",
     dependencies = {
