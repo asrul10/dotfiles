@@ -31,13 +31,6 @@ function download_latest_release {
   wget "$download_url" -O "${HOME}/$(basename "$download_url")"
 }
 
-function alacritty {
-  alacritty_path="${HOME}/.config/alacritty"
-  echo "Setting up alacritty..."
-  rm_if_exists "${alacritty_path}/alacritty.yml"
-  symlink "alacritty/alacritty.yml" "${alacritty_path}"
-}
-
 function kitty() {
   kitty_path="${HOME}/.config/kitty"
   echo "Setting up kitty..."
@@ -106,13 +99,6 @@ function powerlevel10k {
   symlink "zsh/p10k.zsh" "${HOME}/.p10k.zsh"
 }
 
-function fzf {
-  echo "Setting up fzf..."
-  rm_if_exists "${HOME}/.fzf"
-  git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-  "${HOME}/.fzf/install"
-}
-
 usage() {
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-d] [-f] -p param_value arg1 [arg2...]
@@ -129,7 +115,6 @@ exit
 function main {
   echo "Setting up dotfiles..."
   gitconf
-  # alacritty
   kitty
   tmux
   neovim
@@ -139,7 +124,6 @@ function main {
   zsh_vi_mode
   zsh_autosuggestions
   powerlevel10k
-  fzf
 }
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
