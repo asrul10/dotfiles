@@ -146,12 +146,26 @@ local customStatusline = {
 }
 
 M.ui = {
-  theme = "gruvbox",
-  transparency = true,
   -- hl_override = {
   -- 	Comment = { italic = true },
   -- 	["@comment"] = { italic = true },
   -- },
+  statusline = {
+    separator_style = "block",
+    modules = customStatusline,
+  },
+  tabufline = {
+    modules = {
+      btns = function()
+        return ""
+      end,
+    },
+  },
+}
+
+M.base46 = {
+  theme = "gruvbox",
+  transparency = true,
   changed_themes = {
     gruvbox = {
       -- https://github.com/NvChad/base46/blob/master/lua/base46/themes/monekai.lua
@@ -164,18 +178,7 @@ M.ui = {
       base_16 = {
         base08 = "#fe8019",
       },
-    },
-  },
-  statusline = {
-    separator_style = "block",
-    modules = customStatusline,
-  },
-  tabufline = {
-    modules = {
-      btns = function()
-        return ""
-      end,
-    },
+    }
   },
 }
 
