@@ -1,6 +1,7 @@
 ---@type ChadrcConfig
 local M = {}
 local fn = vim.fn
+local version = vim.version().minor
 local modes = {
   ["n"] = { "NORMAL", "Normal" },
   ["no"] = { "NORMAL (no)", "Normal" },
@@ -83,27 +84,17 @@ local customStatusline = {
     return "%#St_gitIcons#" .. branch_name .. added .. changed .. removed
   end,
   lsp_msg = function()
-    if not rawget(vim, "lsp") or vim.lsp.status or not is_activewin() then
+    if version < 10 then
       return ""
     end
 
-    local Lsp = vim.lsp.util.get_progress_messages()[1]
+    local msg = vim.lsp.status()
 
-    if vim.o.columns < 120 or not Lsp then
+    if #msg == 0 or vim.o.columns < 120 then
       return ""
     end
 
-    if Lsp.done then
-      vim.defer_fn(function()
-        vim.cmd.redrawstatus()
-      end, 1000)
-    end
-
-    local msg = Lsp.message or ""
-    local title = Lsp.title or ""
-    local content = string.format(" %%<%s %s ", title, msg)
-
-    return "%#St_LspMsg#" .. (content or "")
+    return "%#St_LspMsg#" .. " " .. msg
   end,
   diagnostics = function()
     if not rawget(vim, "lsp") then
@@ -123,9 +114,14 @@ local customStatusline = {
     return " " .. err .. warn .. hints .. info
   end,
   lsp = function()
-    if rawget(vim, "lsp") then
-      for _, client in ipairs(vim.lsp.get_active_clients()) do
-        if client.attached_buffers[stbufnr()] and client.name ~= "null-ls" and client.name ~= "copilot" then
+    if rawget(vim, "lsp") and version >= 10 then
+      for _, client in ipairs(vim.lsp.get_clients()) do
+        if
+          client.attached_buffers[stbufnr()]
+          and client.name ~= "null-ls"
+          and client.name ~= "copilot"
+          and client.name ~= "GitHub Copilot"
+        then
           return (vim.o.columns > 100 and "%#St_Lsp#" .. client.name .. " ") or ""
         end
       end
@@ -134,7 +130,7 @@ local customStatusline = {
     return "%#St_Lsp#" .. ""
   end,
   cwd = function()
-    local name = vim.loop.cwd()
+    local name = vim.loop.cwd() or ""
     name = "%#St_CommandMode#" .. " " .. (name:match "([^/\\]+)[/\\]*$" or name) .. " "
     return (vim.o.columns > 85 and name) or ""
   end,
@@ -146,10 +142,6 @@ local customStatusline = {
 }
 
 M.ui = {
-  -- hl_override = {
-  -- 	Comment = { italic = true },
-  -- 	["@comment"] = { italic = true },
-  -- },
   statusline = {
     separator_style = "block",
     modules = customStatusline,
@@ -178,7 +170,7 @@ M.base46 = {
       base_16 = {
         base08 = "#fe8019",
       },
-    }
+    },
   },
 }
 

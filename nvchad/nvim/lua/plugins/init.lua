@@ -104,7 +104,7 @@ return {
     "folke/todo-comments.nvim",
     lazy = false,
     priority = 1000,
-    requires = "nvim-lua/plenary.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("todo-comments").setup {
         signs = false,
