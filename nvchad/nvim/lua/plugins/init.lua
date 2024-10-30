@@ -68,18 +68,29 @@ return {
     lazy = false,
     version = false,
     opts = {
-      provider = "copilot",
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
+      provider = "claude",
+      claude = {
+        endpoint = "https://api.anthropic.com",
+        model = "claude-3-5-sonnet-20241022",
+        temperature = 0,
+        max_tokens = 4096,
+      },
       mappings = {
         submit = {
           normal = "<CR>",
           insert = "<CR>",
         },
       },
+      windows = {
+        sidebar_header = {
+          enabled = false,
+        },
+      },
     },
     build = "make",
     dependencies = {
-      -- "stevearc/dressing.nvim",
+      "nvim-treesitter/nvim-treesitter",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
     },
