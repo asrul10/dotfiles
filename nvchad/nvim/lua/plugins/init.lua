@@ -69,7 +69,11 @@ return {
     version = false,
     opts = {
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
-      provider = "claude",
+      -- Copilot with Claude model https://x.com/yetone/status/1858639471031579093
+      provider = "copilot",
+      copilot =  {
+        model = 'claude-3.5-sonnet'
+      },
       claude = {
         endpoint = "https://api.anthropic.com",
         model = "claude-3-5-sonnet-20241022",
