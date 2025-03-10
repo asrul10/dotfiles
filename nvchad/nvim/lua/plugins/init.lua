@@ -71,14 +71,8 @@ return {
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
       -- Copilot with Claude model https://x.com/yetone/status/1858639471031579093
       provider = "copilot",
-      copilot =  {
-        model = 'claude-3.5-sonnet'
-      },
-      claude = {
-        endpoint = "https://api.anthropic.com",
-        model = "claude-3-5-sonnet-20241022",
-        temperature = 0,
-        max_tokens = 4096,
+      copilot = {
+        model = "claude-3.7-sonnet",
       },
       mappings = {
         submit = {
@@ -88,13 +82,17 @@ return {
       },
       windows = {
         sidebar_header = {
-          enabled = false,
+          enaabled = false,
+        },
+        input = {
+          prefix = "",
         },
       },
     },
     build = "make",
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
     },
