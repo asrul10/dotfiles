@@ -66,7 +66,8 @@ return {
     "yetone/avante.nvim",
     event = "VeryLazy",
     lazy = false,
-    version = false,
+    version = "v0.0.23",
+    -- version = false,
     opts = {
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
       -- Copilot with Claude model https://x.com/yetone/status/1858639471031579093
