@@ -74,6 +74,9 @@ return {
       copilot = {
         model = "claude-3.7-sonnet",
       },
+      web_search_engine = {
+        provider = "google",
+      },
       mappings = {
         submit = {
           normal = "<CR>",
@@ -82,7 +85,7 @@ return {
       },
       windows = {
         sidebar_header = {
-          enaabled = false,
+          enabled = false,
         },
         input = {
           prefix = "",
