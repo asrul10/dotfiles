@@ -157,7 +157,7 @@ M.ui = {
 
 M.base46 = {
   theme = "gruvbox",
-  transparency = true,
+  -- transparency = true,
   changed_themes = {
     gruvbox = {
       -- https://github.com/NvChad/base46/blob/master/lua/base46/themes/monekai.lua
@@ -165,6 +165,7 @@ M.base46 = {
         grey = "#7c6f64",
         grey_fg = "#7c6f64",
         grey_fg2 = "#7c6f64",
+        statusline_bg = "#2e2e2e",
       },
       -- styling https://github.com/chriskempson/base16/blob/main/styling.md
       base_16 = {
