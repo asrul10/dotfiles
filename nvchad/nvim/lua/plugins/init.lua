@@ -63,50 +63,6 @@ return {
   },
 
   {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    lazy = true,
-    -- version = false,
-    version = "v0.0.23",
-    opts = {
-      -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
-      -- Copilot with Claude model https://x.com/yetone/status/1858639471031579093
-      provider = "copilot",
-      mode = "legacy", -- agentic | legacy
-      copilot = {
-        -- model = "claude-3.5-sonnet",
-        model = "claude-3.7-sonnet",
-        -- model = "gemini-2.5-pro",
-      },
-      web_search_engine = {
-        provider = "google",
-      },
-      mappings = {
-        submit = {
-          normal = "<CR>",
-          insert = "<CR>",
-        },
-      },
-      windows = {
-        sidebar_header = {
-          enabled = false,
-        },
-        input = {
-          prefix = "",
-        },
-      },
-    },
-    build = "make",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "nvim-telescope/telescope.nvim",
-    },
-  },
-
-  {
     "Wansmer/treesj",
     keys = { "<space>m", "<space>j", "<space>s" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -136,6 +92,20 @@ return {
   {
     "folke/which-key.nvim",
     enabled = false,
+  },
+
+  {
+    "CopilotC-Nvim/CopilotChat.nvim",
+    event = "InsertEnter",
+    dependencies = {
+      { "github/copilot.vim" },
+      { "nvim-lua/plenary.nvim", branch = "master" },
+    },
+    build = "make tiktoken",
+    opts = {
+      model = "claude-3.7-sonnet",
+      context = "buffer",
+    },
   },
 
   { import = "nvchad.blink.lazyspec" },
