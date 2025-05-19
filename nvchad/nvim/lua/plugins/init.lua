@@ -65,14 +65,18 @@ return {
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
-    version = "v0.0.23",
+    lazy = true,
     -- version = false,
+    version = "v0.0.23",
     opts = {
       -- https://github.com/yetone/avante.nvim?tab=readme-ov-file#default-setup-configuration
       -- Copilot with Claude model https://x.com/yetone/status/1858639471031579093
       provider = "copilot",
+      mode = "legacy", -- agentic | legacy
       copilot = {
+        -- model = "claude-3.5-sonnet",
         model = "claude-3.7-sonnet",
+        -- model = "gemini-2.5-pro",
       },
       web_search_engine = {
         provider = "google",
@@ -98,6 +102,7 @@ return {
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
+      "nvim-telescope/telescope.nvim",
     },
   },
 
@@ -132,4 +137,14 @@ return {
     "folke/which-key.nvim",
     enabled = false,
   },
+
+  { import = "nvchad.blink.lazyspec" },
+  {
+    "Saghen/blink.cmp",
+    opts = {
+      completion = {
+        ghost_text = { enabled = false },
+      }
+    }
+  }
 }
