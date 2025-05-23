@@ -27,3 +27,4 @@ map("n", "gb", "<cmd>Gitsigns blame_line<CR>", { desc = "Blame line" })
 
 -- Copilot chat
 map("n", "<leader>aa", "<cmd>CopilotChatOpen<CR>", { desc = "Open copilot chat" })
+map("n", "<leader>ac", "<cmd>CopilotChatCommit<CR>", { desc = "Commit copilot chat" })

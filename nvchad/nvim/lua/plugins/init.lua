@@ -105,6 +105,13 @@ return {
     opts = {
       model = "claude-3.7-sonnet",
       context = "buffer",
+      prompts = {
+        Commit = {
+          prompt =
+          "$gpt-4o-mini Write commit message for the change with commitizen convention. Keep the title under 50 characters and wrap message at 72 characters. Format as a gitcommit code block. Only reply commit message",
+          context = 'git:staged',
+        },
+      },
     },
   },
 
