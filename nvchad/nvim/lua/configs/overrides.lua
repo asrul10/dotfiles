@@ -60,6 +60,9 @@ M.treesitter = {
 
     -- Graphql
     "graphql",
+
+    -- Python
+    "python",
   },
   indent = {
     enable = true,
@@ -116,6 +119,10 @@ M.mason = {
 
     -- Yaml
     "yaml-language-server",
+
+    -- Python
+    "pylyzer",
+    "ruff",
   },
   ui = {
     icons = {

@@ -84,17 +84,7 @@ local customStatusline = {
     return "%#St_gitIcons#" .. branch_name .. added .. changed .. removed
   end,
   lsp_msg = function()
-    if version < 10 then
-      return ""
-    end
-
-    local msg = vim.lsp.status()
-
-    if #msg == 0 or vim.o.columns < 120 then
-      return ""
-    end
-
-    return "%#St_LspMsg#" .. " " .. msg
+    return vim.o.columns < 120 and "" or ""
   end,
   diagnostics = function()
     if not rawget(vim, "lsp") then
