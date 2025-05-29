@@ -121,7 +121,7 @@ M.mason = {
     "yaml-language-server",
 
     -- Python
-    "pylyzer",
+    "pyright",
     "ruff",
   },
   ui = {
