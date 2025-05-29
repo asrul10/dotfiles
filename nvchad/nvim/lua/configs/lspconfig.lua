@@ -1,9 +1,9 @@
-local util = require "lspconfig/util"
+local util = require("lspconfig/util")
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local on_init = require("nvchad.configs.lspconfig").on_init
 local capabilities = require("nvchad.configs.lspconfig").capabilities
 
-local lspconfig = require "lspconfig"
+local lspconfig = require("lspconfig")
 
 local function lspSymbol(name, icon)
   local hl = "DiagnosticSign" .. name
@@ -48,38 +48,38 @@ local servers = {
   "yamlls",
 
   -- Python
-  "pyright",
+  "pylyzer"
 }
 
 for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
+  lspconfig[lsp].setup({
     on_init = on_init,
     on_attach = on_attach,
     capabilities = capabilities,
-  }
+  })
 end
 
 -- Tailwind
-lspconfig.tailwindcss.setup {
+lspconfig.tailwindcss.setup({
   on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
   filetypes = { "typescriptreact" },
-  root_dir = util.root_pattern ".tailwindcss",
-}
+  root_dir = util.root_pattern(".tailwindcss"),
+})
 
 -- TypeScript, JavaScript
-lspconfig.ts_ls.setup {
+lspconfig.ts_ls.setup({
   on_init = on_init,
   on_attach = on_attach,
   capabilities = capabilities,
-  root_dir = util.root_pattern ".tsserver",
+  root_dir = util.root_pattern(".tsserver"),
   single_file_support = false,
-}
+})
 
 -- Deno
-lspconfig.denols.setup {
+lspconfig.denols.setup({
   on_init = on_init,
   on_attach = on_attach,
-  root_dir = util.root_pattern ".denols",
-}
+  root_dir = util.root_pattern(".denols"),
+})
