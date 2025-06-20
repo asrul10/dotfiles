@@ -103,8 +103,8 @@ return {
     },
     build = "make tiktoken",
     opts = {
-      model = "claude-3.7-sonnet",
-      context = "buffer",
+      model = "claude-sonnet-4",
+      show_help = false,
       prompts = {
         Commit = {
           prompt =
