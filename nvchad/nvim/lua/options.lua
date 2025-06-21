@@ -7,11 +7,10 @@ local g = vim.g
 local opt = vim.o
 -- o.cursorlineopt ='both' -- to enable cursorline!
 g.toggle_theme_icon = ""
-opt.number = false
+opt.number = true
 opt.relativenumber = true
 -- opt.colorcolumn = "85"
 opt.scrolloff = 8
-opt.laststatus = 3
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
