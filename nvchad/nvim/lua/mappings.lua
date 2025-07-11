@@ -15,6 +15,16 @@ map(
 )
 map("n", "<leader>kk", "<cmd>Telescope keymaps<CR>", { desc = "Find keymaps" })
 map("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>", { desc = "Open line diagnostics" })
+map("n", "gj", function()
+  local current = vim.diagnostic.is_enabled()
+  if current then
+    vim.diagnostic.enable(false)
+    print("Diagnostics disabled")
+  else
+    vim.diagnostic.enable(true)
+    print("Diagnostics enabled")
+  end
+end, { desc = "Toggle diagnostics" })
 map("n", "<leader>fp", "<cmd>Copilot panel<CR>", { desc = "Show copilot panel" })
 
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
