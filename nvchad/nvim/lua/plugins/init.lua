@@ -125,9 +125,6 @@ return {
       model = "claude-sonnet-4",
       show_help = false,
       prompts = prompts,
-      window = {
-        width = 0.3,
-      },
     },
   },
 
@@ -139,5 +136,40 @@ return {
         ghost_text = { enabled = false },
       },
     },
+  },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {},
+    config = function()
+      require("ibl").setup {
+        scope = {
+          enabled = true,
+          show_start = false,
+          show_end = false,
+          highlight = { "Function", "Label" },
+          include = {
+            node_type = {
+              ["python"] = {
+                "function_definition",
+                "class_definition",
+                "if_statement",
+                "for_statement",
+                "while_statement",
+                "with_statement",
+                "try_statement",
+                "except_clause",
+                "finally_clause",
+                "list",
+                "dictionary",
+                "tuple",
+                "set",
+              },
+            },
+          },
+        },
+      }
+    end,
   },
 }
