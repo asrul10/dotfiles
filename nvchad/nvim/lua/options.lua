@@ -22,13 +22,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
 })
 
--- Set up diagnostics
-vim.diagnostic.config {
-  virtual_text = false,
-  signs = true,
-  float = { border = "single" },
-}
-
 -- Set shiftwidth 4 based on PHP file type
 vim.cmd [[autocmd FileType php setlocal shiftwidth=4]]
 
@@ -37,4 +30,12 @@ local project_name = "aa"
 autocmd("BufEnter", {
   pattern = "*",
   command = "if expand('%:p') =~# '" .. project_name .. "' | setlocal shiftwidth=4 | endif",
+})
+
+-- Copilot
+g.copilot_no_tab_map = true
+vim.api.nvim_set_keymap("i", "<C-a>", 'copilot#Accept("<CR>")', {
+  silent = true,
+  expr = true,
+  noremap = true,
 })

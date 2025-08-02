@@ -4,7 +4,7 @@ local M = {}
 M.ui = {
   statusline = { enabled = false },
   tabufline = {
-    order = { "treeOffset", "buffers"},
+    order = { "treeOffset", "buffers" },
   },
 }
 
