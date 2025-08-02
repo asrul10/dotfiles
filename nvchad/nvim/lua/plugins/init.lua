@@ -172,4 +172,17 @@ return {
       }
     end,
   },
+
+  {
+    "nvim-lualine/lualine.nvim",
+    lazy = false,
+    opts = {
+      options = {
+        icons_enabled = false,
+        theme = "gruvbox_dark",
+        component_separators = { left = "|", right = "|" },
+        section_separators = { left = "", right = "" },
+      },
+    },
+  },
 }
