@@ -45,3 +45,11 @@ for name, opts in pairs(servers) do
   vim.lsp.config(name, opts)
   vim.lsp.enable(name)
 end
+
+local x = vim.diagnostic.severity
+vim.diagnostic.config {
+  virtual_text = { prefix = "" },
+  signs = { text = { [x.ERROR] = "E", [x.WARN] = "W", [x.INFO] = "I", [x.HINT] = "H" } },
+  underline = true,
+  float = { border = "single" },
+}

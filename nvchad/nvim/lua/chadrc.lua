@@ -2,18 +2,14 @@
 local M = {}
 
 M.ui = {
-  telescope = { style = "bordered" },
   statusline = { enabled = false },
   tabufline = {
-    modules = {
-      btns = function()
-        return ""
-      end,
-    },
+    order = { "treeOffset", "buffers"},
   },
 }
 
 M.base46 = {
+  transparency = true,
   theme = "gruvbox",
   ---@diagnostic disable
   changed_themes = {
