@@ -1,85 +1,47 @@
-local util = require "lspconfig/util"
-local on_attach = require("nvchad.configs.lspconfig").on_attach
-local on_init = require("nvchad.configs.lspconfig").on_init
-local capabilities = require("nvchad.configs.lspconfig").capabilities
-
-local lspconfig = require "lspconfig"
-
-local function lspSymbol(name, icon)
-  local hl = "DiagnosticSign" .. name
-  vim.fn.sign_define(hl, { text = icon, numhl = hl, texthl = hl })
-end
-
-lspSymbol("Error", "E")
-lspSymbol("Info", "I")
-lspSymbol("Hint", "H")
-lspSymbol("Warn", "W")
-
--- if you just want default config for the servers then put them in a table
 local servers = {
-  -- HTML
-  "html",
+  html = {},
+  cssls = {},
+  rust_analyzer = {},
+  gopls = {},
+  intelephense = {},
+  jsonls = {},
+  dockerls = {},
+  bashls = {},
+  marksman = {},
+  yamlls = {},
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          typeCheckingMode = "basic",
+          autoSearchPaths = true,
+        },
+      },
+    },
+  },
+  tailwindcss = {
+    filetypes = { "typescriptreact" },
+    root_dir = function(bufnr, on_dir)
+      local fname = vim.api.nvim_buf_get_name(bufnr)
+      local root_marker = vim.fs.find(".tailwindcss", { path = fname, upward = true })[1]
 
-  -- CSS
-  "cssls",
-
-  -- Rust
-  "rust_analyzer",
-
-  -- Go
-  "gopls",
-
-  -- PHP
-  "intelephense",
-
-  -- JSON
-  "jsonls",
-
-  -- Docker
-  "dockerls",
-
-  -- Bash
-  "bashls",
-
-  -- Markdown
-  "marksman",
-
-  -- Yaml
-  "yamlls",
-
-  -- Python
-  "pyright",
+      if root_marker then
+        on_dir(vim.fs.dirname(root_marker))
+      end
+    end,
+  },
+  ts_ls = {
+    single_file_support = false,
+    root_markers = { ".tsserver" },
+    workspace_required = true,
+  },
+  denols = {
+    root_markers = { ".denols" },
+    workspace_required = true,
+  },
 }
 
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    on_init = on_init,
-    on_attach = on_attach,
-    capabilities = capabilities,
-  }
+for name, opts in pairs(servers) do
+  vim.lsp.config(name, opts)
+  vim.lsp.enable(name)
 end
-
--- Tailwind
-lspconfig.tailwindcss.setup {
-  on_init = on_init,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  filetypes = { "typescriptreact" },
-  root_dir = util.root_pattern ".tailwindcss",
-}
-
--- TypeScript, JavaScript
-lspconfig.ts_ls.setup {
-  on_init = on_init,
-  on_attach = on_attach,
-  capabilities = capabilities,
-  root_dir = util.root_pattern ".tsserver",
-  single_file_support = false,
-}
-
--- Deno
-lspconfig.denols.setup {
-  on_init = on_init,
-  on_attach = on_attach,
-  root_dir = util.root_pattern ".denols",
-}
