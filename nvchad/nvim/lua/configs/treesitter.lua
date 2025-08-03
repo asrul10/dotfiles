@@ -1,5 +1,8 @@
 local options = {
   ensure_installed = {
+    -- Git
+    "diff",
+
     -- HTML CSS
     "html",
     "css",

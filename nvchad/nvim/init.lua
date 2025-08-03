@@ -33,4 +33,11 @@ require "nvchad.autocmds"
 
 vim.schedule(function()
   require "mappings"
+  local x = vim.diagnostic.severity
+  vim.diagnostic.config {
+    virtual_text = { prefix = "" },
+    signs = { text = { [x.ERROR] = "E", [x.WARN] = "W", [x.INFO] = "I", [x.HINT] = "H" } },
+    underline = true,
+    float = { border = "single" },
+  }
 end)
