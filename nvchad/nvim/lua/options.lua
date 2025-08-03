@@ -11,6 +11,7 @@ opt.number = true
 opt.relativenumber = true
 -- opt.colorcolumn = "85"
 opt.scrolloff = 8
+opt.winborder = "single"
 
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })

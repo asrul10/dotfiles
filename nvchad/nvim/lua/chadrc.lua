@@ -12,6 +12,9 @@ M.base46 = {
   transparency = true,
   theme = "gruvbox",
   ---@diagnostic disable
+  hl_override = {
+    FloatBorder = { fg = "#7c6f64" },
+  },
   changed_themes = {
     gruvbox = {
       -- https://github.com/NvChad/base46/blob/v3.0/lua/base46/themes/gruvbox.lua
