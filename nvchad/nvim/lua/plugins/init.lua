@@ -26,7 +26,7 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { 'nvim-lua/plenary.nvim' },
+    dependencies = { "nvim-lua/plenary.nvim" },
     opts = require "configs.telescope",
   },
 
@@ -90,6 +90,15 @@ return {
     "nvim-lualine/lualine.nvim",
     lazy = false,
     opts = require "configs.lualine",
+  },
+
+  {
+    "folke/snacks.nvim",
+    lazy = false,
+    opts = {
+      picker = {},
+      bigfile = {},
+    },
   },
 
   {
