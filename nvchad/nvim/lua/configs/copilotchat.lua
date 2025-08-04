@@ -18,7 +18,7 @@ local prompts = {
 }
 
 local options = {
-  model = "claude-sonnet-4",
+  model = "gpt-4.1",
   show_help = false,
   prompts = prompts,
 }
