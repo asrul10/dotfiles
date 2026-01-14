@@ -49,6 +49,7 @@ local options = {
     -- Python
     "pyright",
     "ruff",
+    "ty",
   },
   ui = {
     border = "single",

@@ -9,16 +9,17 @@ local servers = {
   bashls = {},
   marksman = {},
   yamlls = {},
-  pyright = {
-    settings = {
-      python = {
-        analysis = {
-          typeCheckingMode = "basic",
-          autoSearchPaths = true,
-        },
-      },
-    },
-  },
+  -- pyright = {
+  --   settings = {
+  --     python = {
+  --       analysis = {
+  --         typeCheckingMode = "basic",
+  --         autoSearchPaths = true,
+  --       },
+  --     },
+  --   },
+  -- },
+  ty = {},
   tailwindcss = {
     filetypes = { "typescriptreact" },
     root_dir = function(bufnr, on_dir)
