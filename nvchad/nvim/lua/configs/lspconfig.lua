@@ -32,6 +32,7 @@ local servers = {
     end,
   },
   ts_ls = {
+    cmd = { "bunx", "--bun", "typescript-language-server", "--stdio" },
     single_file_support = false,
     root_markers = { ".tsserver" },
     workspace_required = true,

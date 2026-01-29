@@ -62,17 +62,6 @@ return {
     opts = require "configs.todo-comments",
   },
 
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    lazy = false,
-    dependencies = {
-      { "github/copilot.vim" },
-      { "nvim-lua/plenary.nvim", branch = "master" },
-    },
-    build = "make tiktoken",
-    opts = require "configs.copilotchat",
-  },
-
   { import = "nvchad.blink.lazyspec" },
 
   {
