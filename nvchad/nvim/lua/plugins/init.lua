@@ -16,6 +16,8 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main", -- Ensure this is set to 'main'
+    build = ":TSUpdate",
     opts = require "configs.treesitter",
   },
 
