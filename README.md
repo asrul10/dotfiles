@@ -13,6 +13,8 @@ All-in-one Unix/Linux terminal configuration for software development.
 - [diff-so-fancy](https://github.com/so-fancy/diff-so-fancy)
 - [mycli](https://github.com/dbcli/mycli)
 - [pgcli](https://github.com/dbcli/pgcli)
+- [gamescope](https://github.com/ValveSoftware/gamescope)
+- [steam](https://store.steampowered.com/about/)
 
 ## Usage
 ```bash

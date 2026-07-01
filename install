@@ -89,6 +89,12 @@ function zsh_autosuggestions {
     "${custom_zsh}/plugins/zsh-autosuggestions"
 }
 
+function steam {
+  echo "Setting up steam play script..."
+  mkdir -p "${HOME}/.local/bin"
+  symlink "steam/play" "${HOME}/.local/bin/play"
+}
+
 function powerlevel10k {
   echo "Setting up powerlevel10k..."
   custom_zsh=${ZSH_CUSTOM:-$HOME/.dotfiles/zsh}
@@ -105,6 +111,7 @@ Usage: $(basename "${BASH_SOURCE[0]}") [-h] [-d] [-f] -p param_value arg1 [arg2.
 Script description here.
 Available options:
 -h, --help      Print this help and exit
+-s, --server    Install for server
 -d, --debug     Print script debug info
 -f, --flag      Some flag description
 -p, --param     Some param description
@@ -124,10 +131,26 @@ function main {
   zsh_vi_mode
   zsh_autosuggestions
   powerlevel10k
+  steam
+}
+
+function for_server {
+  echo "Setting up for server..."
+  zsh
+  mycli
+  pgcli
+  zsh_vi_mode
+  zsh_autosuggestions
+  powerlevel10k
 }
 
 if [[ "${1-}" =~ ^-*h(elp)?$ ]]; then
   usage
+fi
+
+if [[ "${1-}" =~ ^-*s(erver)?$ ]]; then
+  for_server
+  exit
 fi
 
 main "$@"
