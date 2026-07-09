@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
-gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
 export PROTON_ENABLE_HDR=1
-gnome-session-inhibit --inhibit idle gamescope --hide-cursor-delay 1000 -e -W 1920 -H 1080 -r 60 -f -F fsr --hdr-enabled --backend wayland -- steam
+export DXVK_HDR=1
+export ENABLE_HDR_WSI=1
+
+gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f -F fsr \
+  --hdr-enabled --hdr-sdr-content-nits 180 \
+  --backend drm \
+  -- steam -steamos3
