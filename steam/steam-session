@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Steam Gaming Mode session launcher.
+# Runs as a systemd service on tty1 (see steam-session.service).
+set -u
+export PROTON_ENABLE_HDR=1
+export DXVK_HDR=1
+export ENABLE_HDR_WSI=1
+
+# log for debug
+exec 2> >(tee -a /tmp/steam-session.log >&2)
+echo "=== steam-session start $(date) user=$(id -un) ===" >&2
+gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f -F fsr \
+  --hdr-enabled --hdr-sdr-content-nits 120 \
+  --backend drm \
+  -- steam -steamos3
+rc=$?
+echo "=== steam-session exit rc=$rc $(date) ===" >&2
+
+# Console behaviour: leaving the session shuts the PC down, unless the user
+# already picked Shutdown/Reboot from the SteamOS power menu.
+# Debug guard: if gamescope/steam crashed quickly (rc!=0 and runtime <30s), do NOT poweroff to avoid reboot loop
+if [ "$rc" -ne 0 ]; then
+  echo "steam-session failed rc=$rc, checking if we should avoid poweroff for debug" >&2
+  # if still within first 2 minutes of boot, stay up for inspection instead of shutting down
+  up=$(cut -d. -f1 /proc/uptime 2>/dev/null || echo 999)
+  if [ "$up" -lt 180 ]; then
+    echo "Early failure (<180s uptime), NOT powering off - returning to tty for logs" >&2
+    sleep 5
+    exit "$rc"
+  fi
+fi
+
+if ! systemctl list-jobs 2>/dev/null | grep -qE '(shutdown|reboot|halt)\.target'; then
+  systemctl poweroff
+fi
+exit "$rc"

@@ -1,0 +1,67 @@
+#!/bin/bash
+# /etc/grub.d/41_steam_play
+# Appends a "Steam Gaming Mode" entry to grub.cfg: follows whatever kernel
+# you currently use (grubby default / running kernel) plus
+# systemd.unit=steam.target. Emits nothing if the kernel can't be
+# resolved safely, so a bad run can never produce an unbootable entry.
+
+KV=""
+
+# 1) Currently running kernel — snapshot whatever you booted into when you run deploy.
+UK="$(uname -r 2>/dev/null || true)"
+if [ -n "$UK" ] && [ -f "/boot/vmlinuz-${UK}" ] && [ -f "/boot/initramfs-${UK}.img" ]; then
+  KV="$UK"
+fi
+
+# 2) Fallback: default kernel via grubby (if running kernel not found for some reason).
+if [ -z "$KV" ]; then
+  DK="$(grubby --default-kernel 2>/dev/null || true)"
+  case "$DK" in
+    */vmlinuz-*) KV="${DK##*/vmlinuz-}" ;;
+  esac
+fi
+
+# 3) Fallback: saved_entry in grubenv (BLS id format: machine-id-kver).
+if [ -z "$KV" ]; then
+  SAVED="$(grub2-editenv /boot/grub2/grubenv list 2>/dev/null | sed -n 's/^saved_entry=//p')"
+  if [ -n "$SAVED" ]; then
+    CAND="${SAVED##*-}"
+    if [ -f "/boot/vmlinuz-${CAND}" ]; then KV="$CAND"; fi
+  fi
+fi
+
+# Never emit anything we cannot verify completely.
+if [ -z "$KV" ] || [ ! -f "/boot/vmlinuz-${KV}" ] || [ ! -f "/boot/initramfs-${KV}.img" ]; then
+  echo "41_steam_play: could not resolve current kernel, skipping Play entry" >&2
+  exit 0
+fi
+
+# Copy kernel cmdline verbatim from the matching BLS entry (root=, subvol, etc.)
+OPTS=""
+for f in /boot/loader/entries/*.conf; do
+  [ -e "$f" ] || break
+  if grep -q "vmlinuz-${KV}\$" "$f" 2>/dev/null; then
+    OPTS="$(sed -n 's/^options *//p' "$f")"
+    break
+  fi
+done
+if [ -z "$OPTS" ]; then
+  OPTS="root=UUID=$(findmnt -nro UUID / 2>/dev/null) ro"
+  echo "41_steam_play: no BLS options found, using fallback cmdline" >&2
+fi
+
+# GRUB path prefix: separate /boot partition means paths relative to that fs.
+PFX="/boot"
+BS="$(findmnt -nro SOURCE /boot 2>/dev/null || true)"
+RS="$(findmnt -nro SOURCE / 2>/dev/null || true)"
+if [ -n "$BS" ] && [ "$BS" != "$RS" ]; then PFX=""; fi
+
+cat <<EOF
+menuentry 'Fedora Linux (Steam Gaming Mode)' --class fedora --class gnu-linux --class gnu --class os --id 'steam-gaming-mode' {
+	load_video
+	set gfxpayload=keep
+	insmod gzio
+	linux	${PFX}/vmlinuz-${KV} ${OPTS} systemd.unit=steam.target
+	initrd	${PFX}/initramfs-${KV}.img
+}
+EOF

@@ -1,0 +1,33 @@
+[Unit]
+Description=Steam Gamescope Session (Gaming Mode)
+After=multi-user.target
+PartOf=steam.target
+
+[Service]
+Type=exec
+User=steam
+Group=steam
+PAMName=login
+WorkingDirectory=/home/steam
+StandardInput=tty
+TTYPath=/dev/tty1
+StandardOutput=journal
+StandardError=journal+console
+ExecStart=/usr/local/bin/steam-session
+SuccessExitStatus=0 1
+Restart=no
+# Hardening - blocks sudo/su escalation and reduces kernel attack surface
+NoNewPrivileges=yes
+ProtectClock=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+LockPersonality=yes
+KeyringMode=private
+ProtectHostname=yes
+ProtectKernelTunables=yes
+
+[Install]
+WantedBy=steam.target

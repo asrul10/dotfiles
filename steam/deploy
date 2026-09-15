@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Deploy Steam Gaming Mode: session units + GRUB entry. Idempotent.
+# Usage: sudo ~/.dotfiles/steam/deploy
+
+set -euo pipefail
+REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "Run with sudo: sudo $REPO_DIR/deploy" >&2
+  exit 1
+fi
+
+echo "== Deploying Steam Gaming Mode =="
+install -m 755 "$REPO_DIR/steam-session"           /usr/local/bin/steam-session
+install -m 644 "$REPO_DIR/steam-session.service"   /etc/systemd/system/steam-session.service
+install -m 644 "$REPO_DIR/steam.target"            /etc/systemd/system/steam.target
+install -m 755 "$REPO_DIR/41_steam_play"           /etc/grub.d/41_steam_play
+
+# Ensure GRUB menu is always visible (disable Endless-style auto-hide)
+grub2-editenv /boot/grub2/grubenv unset menu_auto_hide 2>/dev/null || true
+grub2-editenv /boot/grub2/grubenv unset booot_interminate 2>/dev/null || true
+grub2-editenv /boot/grub2/grubenv unset boot_indeterminate 2>/dev/null || true
+
+systemctl daemon-reload
+
+echo "== Regenerating grub config =="
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+echo "== Generated Play entry =="
+grep -A 7 "Steam Gaming Mode" /boot/grub2/grub.cfg || {
+  echo "ERROR: Play entry missing from grub.cfg" >&2
+  exit 1
+}
+
+cat <<'EOF'
+
+Deploy complete.
+  Test once without changing the default:
+      sudo grub2-reboot "Fedora Linux (Steam Gaming Mode)" && reboot
+  Undo everything, anytime:
+      sudo ~/.dotfiles/steam/rollback
+  Note: Play now tracks the newest installed kernel automatically; future
+        kernel updates regenerate correctly via grub2-mkconfig.
+EOF

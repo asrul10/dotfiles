@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+# Fully undo the Steam Gaming Mode setup. Idempotent, safe to run anytime.
+# Usage: sudo ~/.dotfiles/steam/rollback
+
+set -uo pipefail
+
+if [ "$(id -u)" -ne 0 ]; then
+  echo "Run with sudo: sudo ~/.dotfiles/steam/rollback" >&2
+  exit 1
+fi
+
+IN_PLAY=0
+if grep -q 'systemd.unit=steam.target' /proc/cmdline; then IN_PLAY=1; fi
+
+echo "== Rolling back Steam Gaming Mode =="
+systemctl stop steam-session.service 2>/dev/null || true
+
+rm -fv /etc/systemd/system/steam-session.service \
+       /etc/systemd/system/steam.target \
+       /etc/grub.d/41_steam_play \
+       /usr/local/bin/steam-session
+
+systemctl daemon-reload || true
+systemctl reset-failed 'steam*' 2>/dev/null || true
+
+echo "== Regenerating grub config =="
+grub2-mkconfig -o /boot/grub2/grub.cfg
+
+if grep -q "Steam Gaming Mode" /boot/grub2/grub.cfg; then
+  echo "WARNING: Play entry still present in grub.cfg" >&2
+else
+  echo "== Rollback OK: Play entry removed =="
+fi
+
+if [ "$IN_PLAY" -eq 1 ]; then
+  echo "Booted in Play mode; starting desktop now..."
+  systemctl isolate graphical.target
+else
+  echo "Reboot to see the normal boot menu."
+fi
