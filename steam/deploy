@@ -16,9 +16,9 @@ install -m 644 "$REPO_DIR/steam-session.service"   /etc/systemd/system/steam-ses
 install -m 644 "$REPO_DIR/steam.target"            /etc/systemd/system/steam.target
 install -m 755 "$REPO_DIR/41_steam_play"           /etc/grub.d/41_steam_play
 
-# Ensure GRUB menu is always visible (disable Endless-style auto-hide)
+# Ensure GRUB menu is always visible (disable Endless-style auto-hide).
+# NOTE: fixed typo booot_interminate (triple-o) -> boot_indeterminate.
 grub2-editenv /boot/grub2/grubenv unset menu_auto_hide 2>/dev/null || true
-grub2-editenv /boot/grub2/grubenv unset booot_interminate 2>/dev/null || true
 grub2-editenv /boot/grub2/grubenv unset boot_indeterminate 2>/dev/null || true
 
 systemctl daemon-reload
@@ -32,13 +32,23 @@ grep -A 7 "Steam Gaming Mode" /boot/grub2/grub.cfg || {
   exit 1
 }
 
+echo "== Setting default to Gaming Mode (menu still shows, 5s to choose) =="
+grub2-set-default 'steam-gaming-mode'
+grub2-editenv /boot/grub2/grubenv list | grep -q 'saved_entry=steam-gaming-mode' || {
+  echo "ERROR: failed to set saved_entry to steam-gaming-mode" >&2
+  grub2-editenv /boot/grub2/grubenv list >&2 || true
+  exit 1
+}
+
 cat <<'EOF'
 
-Deploy complete.
+Deploy complete. Default is now Steam Gaming Mode (menu still visible,
+timeout unchanged, so you can pick Desktop/older kernel within 5s).
+  Play pins the kernel you deployed from (running kernel first):
+    - To move Play forward, boot the desired kernel on Desktop, then re-run deploy.
+    - After a kernel upgrade, test the new kernel on Desktop first, then deploy.
   Test once without changing the default:
       sudo grub2-reboot "Fedora Linux (Steam Gaming Mode)" && reboot
   Undo everything, anytime:
       sudo ~/.dotfiles/steam/rollback
-  Note: Play now tracks the newest installed kernel automatically; future
-        kernel updates regenerate correctly via grub2-mkconfig.
 EOF

@@ -32,6 +32,20 @@ else
   echo "== Rollback OK: Play entry removed =="
 fi
 
+# Clear stale Gaming default (deploy sets saved_entry=steam-gaming-mode).
+# Point back at the newest installed kernel so next boot lands on Desktop.
+if grub2-editenv /boot/grub2/grubenv list 2>/dev/null | grep -q 'saved_entry=steam-gaming-mode'; then
+  echo "== Resetting GRUB default to newest Desktop kernel =="
+  NEWEST_KV="$(ls /boot/vmlinuz-* 2>/dev/null | sed 's,.*/vmlinuz-,,' | sort -V | tail -n 1 || true)"
+  if [ -n "${NEWEST_KV:-}" ] && [ -f "/boot/vmlinuz-${NEWEST_KV}" ]; then
+    grubby --set-default "/boot/vmlinuz-${NEWEST_KV}" 2>/dev/null || \
+      grub2-editenv /boot/grub2/grubenv unset saved_entry 2>/dev/null || true
+  else
+    grub2-editenv /boot/grub2/grubenv unset saved_entry 2>/dev/null || true
+  fi
+  grub2-editenv /boot/grub2/grubenv list 2>/dev/null || true
+fi
+
 if [ "$IN_PLAY" -eq 1 ]; then
   echo "Booted in Play mode; starting desktop now..."
   systemctl isolate graphical.target
