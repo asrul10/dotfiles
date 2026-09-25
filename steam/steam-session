@@ -2,15 +2,11 @@
 # Steam Gaming Mode session launcher.
 # Runs as a systemd service on tty1 (see steam-session.service).
 set -u
-export PROTON_ENABLE_HDR=1
-export DXVK_HDR=1
-export ENABLE_HDR_WSI=1
 
 # log for debug
 exec 2> >(tee -a /tmp/steam-session.log >&2)
 echo "=== steam-session start $(date) user=$(id -un) ===" >&2
 gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f -F fsr \
-  --hdr-enabled --hdr-sdr-content-nits 120 \
   --backend drm \
   -- steam -steamos3
 rc=$?
