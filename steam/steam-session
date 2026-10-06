@@ -6,7 +6,7 @@ set -u
 # log for debug
 exec 2> >(tee -a /tmp/steam-session.log >&2)
 echo "=== steam-session start $(date) user=$(id -un) ===" >&2
-gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f -F fsr \
+gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f \
   --backend drm \
   -- steam -steamos3
 rc=$?
