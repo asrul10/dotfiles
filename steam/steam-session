@@ -9,13 +9,13 @@ echo "=== steam-session start $(date) user=$(id -un) ===" >&2
 
 # Supervisor policy:
 #   crash (gamescope/Steam aborts) -> clean leftovers, wait, relaunch
-#   3 crashes within 5 minutes     -> give up, leave logs on tty1
+#   3 crashes within 3 minutes     -> give up, leave logs on tty1
 #   clean exit (rc 0/1)            -> leave logs on tty1
 #   SIGTERM / shutdown / reboot    -> exit quietly, never relaunch
 # There is no automatic poweroff; Steam's power menu asks systemd directly.
 RESTART_DELAY=10     # let the GPU finish its reset before relaunching
 MAX_CRASHES=3        # give up after this many crashes...
-CRASH_WINDOW=300     # ...within this many seconds
+CRASH_WINDOW=180     # ...within this many seconds
 ME="$(id -u)"
 
 stopping=0

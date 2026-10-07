@@ -45,7 +45,7 @@ session via GRUB + systemd instead of a desktop session.
 - Logs: `/tmp/steam-session.log` and `journalctl -u steam-session`.
 - `steam-session` supervises the session: after a gamescope/Steam crash (e.g. GPU reset
   -> `VK_ERROR_DEVICE_LOST` -> gamescope SIGABRT, exit 134) it kills leftovers and
-  relaunches; after 3 crashes within 5 minutes it stops and leaves logs on tty1.
+  relaunches; after 3 crashes within 3 minutes it stops and leaves logs on tty1.
 - No automatic poweroff: a clean exit (rc 0/1) also leaves logs on tty1, so Ctrl+Alt+Del
   reboots from there. Steam's Shutdown/Reboot menu still works (systemd job stops the unit).
 - Resolution/refresh hardcoded: 1920x1080@60 in `steam-session` and `play`.
