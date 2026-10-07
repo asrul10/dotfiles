@@ -1,32 +1,105 @@
 #!/usr/bin/env bash
-# Steam Gaming Mode session launcher.
+# Steam Gaming Mode session launcher/supervisor.
 # Runs as a systemd service on tty1 (see steam-session.service).
 set -u
 
 # log for debug
 exec 2> >(tee -a /tmp/steam-session.log >&2)
 echo "=== steam-session start $(date) user=$(id -un) ===" >&2
-gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f \
-  --backend drm \
-  -- steam -steamos3
-rc=$?
-echo "=== steam-session exit rc=$rc $(date) ===" >&2
 
-# Console behaviour: leaving the session shuts the PC down, unless the user
-# already picked Shutdown/Reboot from the SteamOS power menu.
-# Debug guard: if gamescope/steam crashed quickly (rc!=0 and runtime <30s), do NOT poweroff to avoid reboot loop
-if [ "$rc" -ne 0 ]; then
-  echo "steam-session failed rc=$rc, checking if we should avoid poweroff for debug" >&2
-  # if still within first 2 minutes of boot, stay up for inspection instead of shutting down
-  up=$(cut -d. -f1 /proc/uptime 2>/dev/null || echo 999)
-  if [ "$up" -lt 180 ]; then
-    echo "Early failure (<180s uptime), NOT powering off - returning to tty for logs" >&2
-    sleep 5
-    exit "$rc"
+# Supervisor policy:
+#   crash (gamescope/Steam aborts) -> clean leftovers, wait, relaunch
+#   3 crashes within 5 minutes     -> give up, leave logs on tty1
+#   clean exit (rc 0/1)            -> leave logs on tty1
+#   SIGTERM / shutdown / reboot    -> exit quietly, never relaunch
+# There is no automatic poweroff; Steam's power menu asks systemd directly.
+RESTART_DELAY=10     # let the GPU finish its reset before relaunching
+MAX_CRASHES=3        # give up after this many crashes...
+CRASH_WINDOW=300     # ...within this many seconds
+ME="$(id -u)"
+
+stopping=0
+trap 'stopping=1' TERM INT
+fail_times=()
+
+# Belt-and-braces cleanup so a relaunch can never end up with two
+# gamescope/Steam/game instances. gamescope's own reaper does most of this.
+cleanup_stack() {
+  local n
+  echo "cleaning up leftover processes..." >&2
+  sleep 3
+  for n in gamescope gamescope-wl gamescopereaper steam steamwebhelper mangoapp reaper wineserver; do
+    pkill -TERM -u "$ME" -x "$n" 2>/dev/null || true
+  done
+  pkill -TERM -u "$ME" -f '/(steamapps|compatdata)/' 2>/dev/null || true
+  pkill -TERM -u "$ME" -f 'pressure-vessel|pv-adverb' 2>/dev/null || true
+  sleep 3
+  for n in gamescope gamescope-wl gamescopereaper steam steamwebhelper mangoapp reaper wineserver; do
+    pkill -KILL -u "$ME" -x "$n" 2>/dev/null || true
+  done
+  pkill -KILL -u "$ME" -f '/(steamapps|compatdata)/' 2>/dev/null || true
+  pkill -KILL -u "$ME" -f 'pressure-vessel|pv-adverb' 2>/dev/null || true
+
+  local stuck=""
+  for n in gamescope gamescope-wl steam steamwebhelper; do
+    if pgrep -u "$ME" -x "$n" >/dev/null 2>&1; then stuck="$stuck $n"; fi
+  done
+  if [ -n "$stuck" ]; then
+    echo "ERROR: leftovers would not die:$stuck - not relaunching" >&2
+    return 1
   fi
-fi
+  echo "cleanup done" >&2
+  return 0
+}
 
-if ! systemctl list-jobs 2>/dev/null | grep -qE '(shutdown|reboot|halt)\.target'; then
-  systemctl poweroff
+while :; do
+  gamescope --mangoapp -e -W 1920 -H 1080 -r 60 -f \
+    --backend drm \
+    -- steam -steamos3
+  rc=$?
+
+  # systemd stop / shutdown / reboot: get out of the way.
+  if [ "$stopping" -eq 1 ]; then
+    echo "=== steam-session stopping (signal), last rc=$rc ===" >&2
+    break
+  fi
+  echo "=== steam-session exit rc=$rc $(date) ===" >&2
+
+  # Clean exit: user left the session from Steam. Logs stay on tty1.
+  if [ "$rc" -eq 0 ] || [ "$rc" -eq 1 ]; then
+    echo "clean exit, leaving logs on tty1" >&2
+    break
+  fi
+
+  # Crash: count only recent failures, then give up or relaunch.
+  now=$(date +%s)
+  recent=()
+  for t in "${fail_times[@]}"; do
+    if [ $(( now - t )) -lt "$CRASH_WINDOW" ]; then recent+=("$t"); fi
+  done
+  recent+=("$now")
+  fail_times=("${recent[@]}")
+
+  if [ "${#fail_times[@]}" -ge "$MAX_CRASHES" ]; then
+    echo "too many crashes (${#fail_times[@]} within ${CRASH_WINDOW}s), leaving logs on tty1" >&2
+    break
+  fi
+
+  echo "crash detected (rc=$rc), crash ${#fail_times[@]}/${MAX_CRASHES}: relaunching after cleanup" >&2
+  if ! cleanup_stack; then
+    break
+  fi
+
+  sleep "$RESTART_DELAY" &
+  spid=$!
+  wait "$spid" 2>/dev/null || true
+  if [ "$stopping" -eq 1 ]; then
+    echo "stop requested during restart delay, not relaunching" >&2
+    break
+  fi
+done
+
+if [ "$stopping" -eq 1 ]; then
+  exit 0
 fi
 exit "$rc"

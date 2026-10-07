@@ -24,7 +24,7 @@ session via GRUB + systemd instead of a desktop session.
 |---|---|---|
 | `deploy` | (run via sudo) | Installs session units + GRUB entry; sets default boot to Gaming Mode |
 | `rollback` | (run via sudo) | Removes everything; restores Desktop default |
-| `steam-session` | `/usr/local/bin/steam-session` | Launches gamescope + Steam on tty1; powers off on exit |
+| `steam-session` | `/usr/local/bin/steam-session` | Supervises gamescope + Steam on tty1; auto-relaunches after a crash |
 | `steam-session.service` | `/etc/systemd/system/steam-session.service` | Unit: runs `steam-session` as user `steam` on tty1 |
 | `steam.target` | `/etc/systemd/system/steam.target` | Gaming Mode boot target (conflicts with display manager/getty) |
 | `41_steam_play` | `/etc/grub.d/41_steam_play` | GRUB generator: adds "Steam Gaming Mode" entry, pins running kernel |
@@ -43,8 +43,11 @@ session via GRUB + systemd instead of a desktop session.
 - `41_steam_play` emits nothing and exits 0 if the kernel can't be fully verified, so it
   can never create an unbootable entry.
 - Logs: `/tmp/steam-session.log` and `journalctl -u steam-session`.
-- Crash guard: non-zero exit within 180s of boot stays on tty for debugging; otherwise
-  leaving the session powers the PC off.
+- `steam-session` supervises the session: after a gamescope/Steam crash (e.g. GPU reset
+  -> `VK_ERROR_DEVICE_LOST` -> gamescope SIGABRT, exit 134) it kills leftovers and
+  relaunches; after 3 crashes within 5 minutes it stops and leaves logs on tty1.
+- No automatic poweroff: a clean exit (rc 0/1) also leaves logs on tty1, so Ctrl+Alt+Del
+  reboots from there. Steam's Shutdown/Reboot menu still works (systemd job stops the unit).
 - Resolution/refresh hardcoded: 1920x1080@60 in `steam-session` and `play`.
 - Requires a `steam` user/group with home `/home/steam`.
 - `deploy` and `rollback` require root and check `id -u`.
