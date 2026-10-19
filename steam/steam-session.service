@@ -22,7 +22,9 @@ ProtectClock=yes
 ProtectKernelLogs=yes
 ProtectKernelModules=yes
 ProtectControlGroups=yes
-RestrictSUIDSGID=yes
+# Do NOT add RestrictSUIDSGID=yes: systemd implements it by forcing openat2()
+# to return ENOSYS, which breaks GNU tar's directory extraction. Steam's
+# first-run bootstrap then dies with "Cannot mkdir: Function not implemented".
 RestrictRealtime=yes
 LockPersonality=yes
 KeyringMode=private

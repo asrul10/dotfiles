@@ -10,8 +10,8 @@ echo "=== steam-session start $(date) user=$(id -un) ===" >&2
 # Supervisor policy:
 #   crash (gamescope/Steam aborts) -> clean leftovers, wait, relaunch
 #   3 crashes within 3 minutes     -> give up, leave logs on tty1
-#   clean exit (rc 0/1)            -> leave logs on tty1
-#   SIGTERM / shutdown / reboot    -> exit quietly, never relaunch
+#   clean exit (rc 0/1)            -> user left: hand off to gdm (desktop)
+#   SIGTERM / shutdown / reboot    -> exit quietly, never relaunch, no handoff
 # There is no automatic poweroff; Steam's power menu asks systemd directly.
 RESTART_DELAY=10     # let the GPU finish its reset before relaunching
 MAX_CRASHES=3        # give up after this many crashes...
@@ -65,9 +65,12 @@ while :; do
   fi
   echo "=== steam-session exit rc=$rc $(date) ===" >&2
 
-  # Clean exit: user left the session from Steam. Logs stay on tty1.
+  # Clean exit: user left the session from Steam ("Switch to Desktop" /
+  # exit). Hand the console over to the desktop login.
   if [ "$rc" -eq 0 ] || [ "$rc" -eq 1 ]; then
-    echo "clean exit, leaving logs on tty1" >&2
+    echo "clean exit, handing off to desktop" >&2
+    systemctl start gdm.service || \
+      echo "WARN: could not start gdm; logs stay on tty1 (Ctrl+Alt+Del reboots)" >&2
     break
   fi
 

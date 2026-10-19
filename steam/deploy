@@ -10,11 +10,27 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
+# Ensure the session user exists: steam-session.service runs as User=steam.
+# Without it, the unit dies with status=217/USER and Gaming Mode boots to a
+# blank tty1.
+if ! getent passwd steam >/dev/null 2>&1; then
+  echo "== Creating session user 'steam' (home /home/steam) =="
+  useradd --create-home --home-dir /home/steam --shell /usr/bin/bash steam
+fi
+
+# mangoapp is optional: --mangoapp only enables the overlay protocol, so a
+# missing binary means no MangoHud overlay - not a broken session.
+command -v mangoapp >/dev/null 2>&1 || \
+  echo "WARN: mangoapp not found - install 'mangohud' for the MangoHud overlay" >&2
+
 echo "== Deploying Steam Gaming Mode =="
 install -m 755 "$REPO_DIR/steam-session"           /usr/local/bin/steam-session
 install -m 644 "$REPO_DIR/steam-session.service"   /etc/systemd/system/steam-session.service
 install -m 644 "$REPO_DIR/steam.target"            /etc/systemd/system/steam.target
 install -m 755 "$REPO_DIR/41_steam_play"           /etc/grub.d/41_steam_play
+install -m 755 "$REPO_DIR/steamos-session-select"  /usr/local/bin/steamos-session-select
+ln -sfn /usr/local/bin/steamos-session-select /usr/bin/steamos-session-select
+install -m 644 "$REPO_DIR/49-steam-session.rules"  /etc/polkit-1/rules.d/49-steam-session.rules
 
 # Ensure GRUB menu is always visible (disable Endless-style auto-hide).
 # NOTE: fixed typo booot_interminate (triple-o) -> boot_indeterminate.
@@ -49,6 +65,9 @@ timeout unchanged, so you can pick Desktop/older kernel within 5s).
     - After a kernel upgrade, test the new kernel on Desktop first, then deploy.
   Test once without changing the default:
       sudo grub2-reboot "Fedora Linux (Steam Gaming Mode)" && reboot
+  "Switch to Desktop" from the Deck UI quits Steam; steam-session then
+  raises gdm (one-shot - the GRUB default stays Gaming Mode):
+      back to Gaming Mode from the Desktop: sudo systemctl isolate steam.target
   Undo everything, anytime:
       sudo ~/.dotfiles/steam/rollback
 EOF

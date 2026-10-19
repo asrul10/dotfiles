@@ -1,0 +1,13 @@
+// Allow the unprivileged "steam" session supervisor to hand the console
+// over to the desktop when the user exits Gaming Mode: the Deck UI's
+// "Switch to Desktop" quits the Steam client, and steam-session then
+// starts gdm.service.
+// Narrow on purpose: only user steam, only gdm.service, only the start verb.
+polkit.addRule(function(action, subject) {
+    if (action.id == "org.freedesktop.systemd1.manage-units" &&
+        subject.user == "steam" &&
+        action.lookup("unit") == "gdm.service" &&
+        action.lookup("verb") == "start") {
+        return polkit.Result.YES;
+    }
+});

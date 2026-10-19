@@ -3,17 +3,6 @@
 Steam Gaming Mode scripts for this PC. Boots Fedora straight into a Gamescope/Steam
 session via GRUB + systemd instead of a desktop session.
 
-## Scope and access boundary
-
-- Treat this directory (`~/.dotfiles/steam`) as the root project for all work.
-- NEVER read, search, list, or modify anything outside this directory — especially the
-  parent `~/.dotfiles` directory or any sibling of it. `../` is off-limits.
-- NEVER attempt to read any `zshrc` file (e.g. `~/.zshrc`). `opencode.json` in this
-  directory enforces a hard `read` deny on it.
-- If a task seems to require context from outside this directory, stop and ask the user.
-- This file only applies when opencode starts in this directory (or below). Do not run
-  `git init` or create a `.git` here unless the user explicitly asks.
-
 ## Canary (instructions check)
 
 - If the user asks for the "scope token", reply exactly: `STEAM-SCOPE-OK`
@@ -22,12 +11,14 @@ session via GRUB + systemd instead of a desktop session.
 
 | File | Deployed to | Role |
 |---|---|---|
-| `deploy` | (run via sudo) | Installs session units + GRUB entry; sets default boot to Gaming Mode |
+| `deploy` | (run via sudo) | Installs session units + GRUB entry; creates the `steam` user; sets default boot to Gaming Mode |
 | `rollback` | (run via sudo) | Removes everything; restores Desktop default |
-| `steam-session` | `/usr/local/bin/steam-session` | Supervises gamescope + Steam on tty1; auto-relaunches after a crash |
+| `steam-session` | `/usr/local/bin/steam-session` | Supervises gamescope + Steam on tty1; relaunches after a crash; hands off to gdm on a clean exit |
 | `steam-session.service` | `/etc/systemd/system/steam-session.service` | Unit: runs `steam-session` as user `steam` on tty1 |
 | `steam.target` | `/etc/systemd/system/steam.target` | Gaming Mode boot target (conflicts with display manager/getty) |
 | `41_steam_play` | `/etc/grub.d/41_steam_play` | GRUB generator: adds "Steam Gaming Mode" entry, pins running kernel |
+| `steamos-session-select` | `/usr/local/bin/steamos-session-select` (+ `/usr/bin` symlink) | Deck UI session hook: "Switch to Desktop" quits Steam for the gdm handoff |
+| `49-steam-session.rules` | `/etc/polkit-1/rules.d/49-steam-session.rules` | polkit: user `steam` may start `gdm.service` (desktop handoff) |
 | `play` | not deployed | Manual gamescope+Steam command for testing from Desktop |
 
 ## Commands
@@ -46,8 +37,18 @@ session via GRUB + systemd instead of a desktop session.
 - `steam-session` supervises the session: after a gamescope/Steam crash (e.g. GPU reset
   -> `VK_ERROR_DEVICE_LOST` -> gamescope SIGABRT, exit 134) it kills leftovers and
   relaunches; after 3 crashes within 3 minutes it stops and leaves logs on tty1.
-- No automatic poweroff: a clean exit (rc 0/1) also leaves logs on tty1, so Ctrl+Alt+Del
-  reboots from there. Steam's Shutdown/Reboot menu still works (systemd job stops the unit).
+- A clean exit (rc 0/1) means the user left Gaming Mode: `steam-session` best-effort starts
+  gdm (desktop login). "Switch to Desktop" in the Deck UI calls `steamos-session-select`,
+  which quits the Steam client to trigger this. Shutdown/reboot stop the unit and never
+  start gdm; a crash-giveup leaves logs on tty1 (Ctrl+Alt+Del reboots from there). The
+  switch is one-shot: the GRUB default stays Gaming Mode; from the Desktop,
+  `sudo systemctl isolate steam.target` returns to Gaming Mode.
 - Resolution/refresh hardcoded: 1920x1080@60 in `steam-session` and `play`.
-- Requires a `steam` user/group with home `/home/steam`.
+- Never add `RestrictSUIDSGID=yes` to `steam-session.service`: systemd implements it by
+  forcing `openat2()` to return ENOSYS, which breaks GNU tar. Steam's first-run bootstrap
+  then fails with `Cannot mkdir: Function not implemented` and the session exits.
+- `deploy` creates the `steam` user/group + `/home/steam` if missing (without it the unit
+  fails with `217/USER` and Gaming Mode boots to a blank tty1).
+- `mangoapp` is optional: `--mangoapp` only enables the overlay protocol; install `mangohud`
+  (provides `/usr/bin/mangoapp`) for the MangoHud overlay. `deploy` warns when it's missing.
 - `deploy` and `rollback` require root and check `id -u`.

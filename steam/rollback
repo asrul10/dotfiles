@@ -18,7 +18,10 @@ systemctl stop steam-session.service 2>/dev/null || true
 rm -fv /etc/systemd/system/steam-session.service \
        /etc/systemd/system/steam.target \
        /etc/grub.d/41_steam_play \
-       /usr/local/bin/steam-session
+       /usr/local/bin/steam-session \
+       /usr/local/bin/steamos-session-select \
+       /usr/bin/steamos-session-select \
+       /etc/polkit-1/rules.d/49-steam-session.rules
 
 systemctl daemon-reload || true
 systemctl reset-failed 'steam*' 2>/dev/null || true

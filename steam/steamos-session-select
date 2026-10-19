@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Steam Deck UI session hook ("Switch to Desktop").
+# The Steam client runs this helper for session actions; quitting the client
+# ends the gamescope session, and steam-session then hands tty1 to gdm.
+# Deployed to /usr/local/bin (+ /usr/bin symlink) by deploy.
+set -u
+
+LOG=/tmp/steam-session.log
+echo "=== steamos-session-select $(date) arg=${1:-<none>} ===" >>"$LOG" 2>&1 || true
+
+case "${1:-}" in
+  desktop|plasma|plasma-wayland|plasma-x11)
+    # Switch to Desktop: quit the client; steam-session does the gdm handoff.
+    exec steam -shutdown
+    ;;
+  gamescope|"")
+    # Already in Gaming Mode: nothing to do.
+    exit 0
+    ;;
+  *)
+    echo "steamos-session-select: unsupported mode '${1:-}'" >&2
+    exit 1
+    ;;
+esac
