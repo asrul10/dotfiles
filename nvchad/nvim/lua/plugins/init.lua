@@ -38,12 +38,6 @@ return {
   },
 
   {
-    "github/copilot.vim",
-    lazy = false,
-    ft = { "markdown" },
-  },
-
-  {
     "Wansmer/treesj",
     keys = { "<space>m", "<space>j", "<space>s" },
     dependencies = { "nvim-treesitter/nvim-treesitter" },

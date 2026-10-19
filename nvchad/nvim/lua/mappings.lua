@@ -25,8 +25,6 @@ map("n", "gj", function()
     print "Diagnostics enabled"
   end
 end, { desc = "Toggle diagnostics" })
-map("n", "<leader>fp", "<cmd>Copilot panel<CR>", { desc = "Show copilot panel" })
-
 map("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
 map("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
 map("v", "<leader>ss", ":s/", { desc = "Find and replace selected lines" })
