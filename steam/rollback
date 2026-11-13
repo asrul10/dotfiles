@@ -23,8 +23,19 @@ rm -fv /etc/systemd/system/steam-session.service \
        /usr/bin/steamos-session-select \
        /etc/polkit-1/rules.d/49-steam-session.rules
 
+echo "== Unmasking iSCSI/NFS units =="
+systemctl unmask iscsi.service iscsi-starter.service iscsi-onboot.service \
+  iscsid.socket iscsiuio.socket nfs-client.target 2>/dev/null || true
+
 systemctl daemon-reload || true
 systemctl reset-failed 'steam*' 2>/dev/null || true
+
+echo "== Restoring GRUB timeout to 5s =="
+if grep -q '^GRUB_TIMEOUT=' /etc/default/grub; then
+  sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=5/' /etc/default/grub
+else
+  printf '\nGRUB_TIMEOUT=5\n' >> /etc/default/grub
+fi
 
 echo "== Regenerating grub config =="
 grub2-mkconfig -o /boot/grub2/grub.cfg

@@ -56,12 +56,14 @@ BS="$(findmnt -nro SOURCE /boot 2>/dev/null || true)"
 RS="$(findmnt -nro SOURCE / 2>/dev/null || true)"
 if [ -n "$BS" ] && [ "$BS" != "$RS" ]; then PFX=""; fi
 
+# Gaming Mode disables Plymouth: it skips plymouth-start/switch-root work and
+# makes the LUKS passphrase prompt plain text on tty1. Desktop entries keep it.
 cat <<EOF
 menuentry 'Fedora Linux (Steam Gaming Mode)' --class fedora --class gnu-linux --class gnu --class os --id 'steam-gaming-mode' {
 	load_video
 	set gfxpayload=keep
 	insmod gzio
-	linux	${PFX}/vmlinuz-${KV} ${OPTS} systemd.unit=steam.target
+	linux	${PFX}/vmlinuz-${KV} ${OPTS} systemd.unit=steam.target plymouth.enable=0
 	initrd	${PFX}/initramfs-${KV}.img
 }
 EOF

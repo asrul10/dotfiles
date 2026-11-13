@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy Steam Gaming Mode: session units + GRUB entry. Idempotent.
+# Deploy Steam Gaming Mode: session units + GRUB entry + boot tuning. Idempotent.
 # Usage: sudo ~/.dotfiles/steam/deploy
 
 set -euo pipefail
@@ -32,6 +32,25 @@ install -m 755 "$REPO_DIR/steamos-session-select"  /usr/local/bin/steamos-sessio
 ln -sfn /usr/local/bin/steamos-session-select /usr/bin/steamos-session-select
 install -m 644 "$REPO_DIR/49-steam-session.rules"  /etc/polkit-1/rules.d/49-steam-session.rules
 
+# Speed up boot: these units are enabled by default but unused here. iSCSI is
+# ordered before remote-fs.target and waits for network-online.target, so every
+# boot waits for NetworkManager-wait-online (6-7s on Wi-Fi) even though the
+# iSCSI units themselves are skipped. nfs-client.target is unused too and pulls
+# in NFS/GSS services. rollback unmasks them.
+echo "== Masking unused iSCSI/NFS boot units =="
+systemctl mask \
+  iscsi.service iscsi-starter.service iscsi-onboot.service \
+  iscsid.socket iscsiuio.socket nfs-client.target 2>/dev/null || true
+
+# Boot menu timeout: 5s stock -> 3s. The menu stays visible; pressing any key
+# during the countdown pauses it.
+echo "== Setting GRUB timeout to 3s =="
+if grep -q '^GRUB_TIMEOUT=' /etc/default/grub; then
+  sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=3/' /etc/default/grub
+else
+  printf '\nGRUB_TIMEOUT=3\n' >> /etc/default/grub
+fi
+
 # Ensure GRUB menu is always visible (disable Endless-style auto-hide).
 # NOTE: fixed typo booot_interminate (triple-o) -> boot_indeterminate.
 grub2-editenv /boot/grub2/grubenv unset menu_auto_hide 2>/dev/null || true
@@ -48,7 +67,7 @@ grep -A 7 "Steam Gaming Mode" /boot/grub2/grub.cfg || {
   exit 1
 }
 
-echo "== Setting default to Gaming Mode (menu still shows, 5s to choose) =="
+echo "== Setting default to Gaming Mode (menu still shows, 3s to choose) =="
 grub2-set-default 'steam-gaming-mode'
 grub2-editenv /boot/grub2/grubenv list | grep -q 'saved_entry=steam-gaming-mode' || {
   echo "ERROR: failed to set saved_entry to steam-gaming-mode" >&2
@@ -59,7 +78,8 @@ grub2-editenv /boot/grub2/grubenv list | grep -q 'saved_entry=steam-gaming-mode'
 cat <<'EOF'
 
 Deploy complete. Default is now Steam Gaming Mode (menu still visible,
-timeout unchanged, so you can pick Desktop/older kernel within 5s).
+3s timeout, so you can pick Desktop/older kernel within 3s).
+  Boot tuning applied: GRUB timeout 3s; unused iSCSI/NFS units masked.
   Play pins the kernel you deployed from (running kernel first):
     - To move Play forward, boot the desired kernel on Desktop, then re-run deploy.
     - After a kernel upgrade, test the new kernel on Desktop first, then deploy.

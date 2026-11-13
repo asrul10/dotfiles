@@ -11,7 +11,7 @@ session via GRUB + systemd instead of a desktop session.
 
 | File | Deployed to | Role |
 |---|---|---|
-| `deploy` | (run via sudo) | Installs session units + GRUB entry; creates the `steam` user; sets default boot to Gaming Mode |
+| `deploy` | (run via sudo) | Installs session units + GRUB entry; creates the `steam` user; sets default boot to Gaming Mode; sets a 3s GRUB timeout and masks unused iSCSI/NFS units |
 | `rollback` | (run via sudo) | Removes everything; restores Desktop default |
 | `steam-session` | `/usr/local/bin/steam-session` | Supervises gamescope + Steam on tty1; relaunches after a crash; hands off to gdm on a clean exit |
 | `steam-session.service` | `/etc/systemd/system/steam-session.service` | Unit: runs `steam-session` as user `steam` on tty1 |
@@ -23,7 +23,8 @@ session via GRUB + systemd instead of a desktop session.
 
 ## Commands
 
-- `sudo ./deploy` — install units + GRUB entry, set Gaming Mode as GRUB default (idempotent)
+- `sudo ./deploy` — install units + GRUB entry, set Gaming Mode as GRUB default,
+  apply boot tuning (idempotent)
 - `sudo ./rollback` — undo everything (idempotent, safe anytime)
 - `sudo grub2-reboot "Fedora Linux (Steam Gaming Mode)" && reboot` — one-time test boot
 
@@ -52,3 +53,13 @@ session via GRUB + systemd instead of a desktop session.
 - `mangoapp` is optional: `--mangoapp` only enables the overlay protocol; install `mangohud`
   (provides `/usr/bin/mangoapp`) for the MangoHud overlay. `deploy` warns when it's missing.
 - `deploy` and `rollback` require root and check `id -u`.
+- Boot speed tuning: `deploy` sets `GRUB_TIMEOUT=3` in `/etc/default/grub` and masks
+  unused iSCSI/NFS units (`iscsi.service`, `iscsi-starter.service`, `iscsi-onboot.service`,
+  `iscsid.socket`, `iscsiuio.socket`, `nfs-client.target`). iSCSI is ordered before
+  `remote-fs.target` and waits for `network-online.target`, which otherwise makes every
+  boot wait 6-7s for `NetworkManager-wait-online`. `rollback` restores `GRUB_TIMEOUT=5`
+  and unmasks them. If NFS/iSCSI is ever needed, unmask the relevant units first.
+- The Gaming Mode GRUB entry adds `plymouth.enable=0`: no boot splash, text LUKS prompt
+  on tty1, and ~0.5s less initrd work. Desktop entries are unchanged.
+- ASRock B550 POST is ~14s; enabling "Memory Context Restore" (+ "Power Down Enable") and
+  "Fast Boot" in the BIOS cuts it to ~5-7s. Manual, not scripted.
